@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { DesempenhoClient } from "./client";
+import { PerformanceServerService } from "@/services/server/performance";
 
 export default async function DesempenhoPage() {
     const supabase = await createClient();
@@ -16,14 +17,7 @@ export default async function DesempenhoPage() {
     }
 
     // Fetch user's quiz attempts with clinical case info
-    const { data: attempts } = await supabase
-        .from("quiz_attempts")
-        .select(`
-      *,
-      clinical_cases (title, discipline)
-    `)
-        .eq("user_id", user.id)
-        .order("completed_at", { ascending: false });
+    const attempts = await PerformanceServerService.getUserAttempts(user.id);
 
     return <DesempenhoClient attempts={attempts || []} />;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Badge } from "@/components/ui/badge";
 import {
     Table,
@@ -27,6 +26,25 @@ interface DesempenhoClientProps {
     attempts: (QuizAttempt & { clinical_cases: { title: string; discipline: string } | null })[];
 }
 
+// Helper functions
+const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+
+const getScoreBadge = (score: number | null) => {
+    const s = score || 0;
+    if (s >= 80) return <Badge className="bg-emerald-500 text-white">{s.toFixed(0)}%</Badge>;
+    if (s >= 60) return <Badge className="bg-amber-500 text-white">{s.toFixed(0)}%</Badge>;
+    return <Badge className="bg-red-500 text-white">{s.toFixed(0)}%</Badge>;
+};
+
 export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
     // Calculate stats
     const totalAttempts = attempts.length;
@@ -40,78 +58,42 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
         ? (attempts.filter((a) => (a.score || 0) >= 70).length / totalAttempts) * 100
         : 0;
 
-    const formatDate = (dateStr: string | null) => {
-        if (!dateStr) return "-";
-        return new Date(dateStr).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
-
-    const getScoreBadge = (score: number | null) => {
-        const s = score || 0;
-        if (s >= 80) return <Badge className="bg-emerald-500 text-white">{s.toFixed(0)}%</Badge>;
-        if (s >= 60) return <Badge className="bg-amber-500 text-white">{s.toFixed(0)}%</Badge>;
-        return <Badge className="bg-red-500 text-white">{s.toFixed(0)}%</Badge>;
-    };
-
-    // Stats cards config - Using tile colors
+    // Stats cards config
     const statsCards = [
-        {
-            title: "Total de Testes",
-            value: totalAttempts,
-            icon: BarChart2,
-            gradient: "gradient-tile-a",
-        },
-        {
-            title: "Média Geral",
-            value: `${averageScore.toFixed(1)}%`,
-            icon: TrendingUp,
-            gradient: "gradient-tile-b",
-        },
-        {
-            title: "Melhor Nota",
-            value: `${bestScore.toFixed(1)}%`,
-            icon: Trophy,
-            gradient: "gradient-tile-c",
-        },
-        {
-            title: "Taxa de Aprovação",
-            value: `${passRate.toFixed(0)}%`,
-            icon: Target,
-            gradient: "gradient-tile-d",
-        },
+        { title: "Total de Testes", value: totalAttempts, icon: BarChart2, gradient: "gradient-tile-a" },
+        { title: "Média Geral", value: `${averageScore.toFixed(1)}%`, icon: TrendingUp, gradient: "gradient-tile-b" },
+        { title: "Melhor Nota", value: `${bestScore.toFixed(1)}%`, icon: Trophy, gradient: "gradient-tile-c" },
+        { title: "Taxa de Aprovação", value: `${passRate.toFixed(0)}%`, icon: Target, gradient: "gradient-tile-d" },
     ];
 
     return (
-        <div className="space-y-6 p-4">
+        <div className="space-y-4 p-3 md:p-4">
             {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-                <Activity className="w-8 h-8 text-[var(--color-tile-a-from)]" />
-                <h1 className="text-2xl font-semibold text-foreground">Desempenho</h1>
+            <div className="flex items-center gap-3 mb-4">
+                <Activity className="w-6 h-6 text-[var(--color-tile-a-from)]" />
+                <h1 className="text-xl font-semibold text-foreground">Desempenho</h1>
             </div>
 
-            {/* Stats Cards - Dark with gradient accent */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Stats Cards - Dark with gradient accent - COMPACT */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {statsCards.map((stat, index) => (
                     <div
                         key={index}
-                        className="relative overflow-hidden bg-card border border-border"
+                        className="relative overflow-hidden bg-card border border-border group hover:border-[var(--color-tile-a-from)]/30 transition-colors"
                     >
                         {/* Gradient accent bar */}
                         <div className={`h-1 ${stat.gradient}`} />
 
-                        <div className="p-5">
-                            <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 ${stat.gradient} flex items-center justify-center`}>
-                                    <stat.icon className="w-6 h-6 text-white" />
+                        <div className="p-4">
+                            <div className="flex flex-col gap-2">
+                                <div className="flex justify-between items-start">
+                                    <div className={`w-8 h-8 rounded-sm ${stat.gradient} flex items-center justify-center`}>
+                                        <stat.icon className="w-4 h-4 text-white" />
+                                    </div>
+                                    <span className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider">{stat.title}</span>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">{stat.title}</p>
-                                    <p className="text-xl font-bold text-foreground">{stat.value}</p>
+                                    <p className="text-xl font-bold text-foreground leading-none">{stat.value}</p>
                                 </div>
                             </div>
                         </div>
@@ -119,22 +101,20 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                 ))}
             </div>
 
-            {/* Performance Chart Placeholder */}
-            <div className="bg-card border border-border p-6">
-                <div className="flex items-center gap-2 mb-4">
-                    <Zap className="w-5 h-5 text-[var(--color-tile-b-from)]" />
-                    <h2 className="text-lg font-semibold text-foreground">Evolução do Desempenho</h2>
+            {/* Performance Chart */}
+            <div className="bg-card border border-border p-4">
+                <div className="flex items-center gap-2 mb-2">
+                    <Zap className="w-4 h-4 text-[var(--color-tile-b-from)]" />
+                    <h2 className="text-base font-semibold text-foreground">Evolução de Desempenho</h2>
                 </div>
 
                 {attempts.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                        <BarChart2 className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                        <p className="text-lg">Nenhum dado disponível</p>
-                        <p className="text-sm">Complete seu primeiro caso clínico para ver os gráficos.</p>
+                    <div className="text-center py-8 text-muted-foreground">
+                        <BarChart2 className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                        <p className="text-sm">Nenhum dado disponível</p>
                     </div>
                 ) : (
-
-                    <div className="h-80 w-full mt-4">
+                    <div className="h-64 w-full mt-2">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart
                                 data={[...attempts]
@@ -146,88 +126,88 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                                         title: a.clinical_cases?.title
                                     }))
                                 }
-                                margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                                margin={{ top: 5, right: 10, bottom: 5, left: -20 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.2} />
                                 <XAxis
                                     dataKey="date"
                                     stroke="#888888"
-                                    fontSize={12}
+                                    fontSize={10}
                                     tickLine={false}
                                     axisLine={false}
+                                    dy={10}
                                 />
                                 <YAxis
                                     stroke="#888888"
-                                    fontSize={12}
+                                    fontSize={10}
                                     tickLine={false}
                                     axisLine={false}
                                     domain={[0, 100]}
                                 />
                                 <Tooltip
-                                    contentStyle={{ backgroundColor: "#1e1e1e", borderColor: "#333", color: "#fff" }}
+                                    contentStyle={{ backgroundColor: "#09090b", borderColor: "#27272a", color: "#fff", fontSize: '12px', borderRadius: '4px', padding: '8px' }}
                                     itemStyle={{ color: "#fff" }}
                                 />
-                                <ReferenceLine y={70} stroke="#10b981" strokeDasharray="3 3" label={{ position: 'right', value: '70%', fill: '#10b981', fontSize: 10 }} />
+                                <ReferenceLine y={70} stroke="#10b981" strokeDasharray="3 3" />
                                 <Line
                                     type="monotone"
                                     dataKey="score"
                                     stroke="var(--color-tile-b-from)"
-                                    strokeWidth={3}
-                                    dot={{ r: 4, fill: "var(--color-tile-b-to)" }}
-                                    activeDot={{ r: 6 }}
+                                    strokeWidth={2}
+                                    dot={{ r: 3, fill: "var(--color-tile-b-to)" }}
+                                    activeDot={{ r: 5 }}
                                     name="Pontuação"
                                 />
                             </LineChart>
                         </ResponsiveContainer>
-                    </div >
-                )
-                }
-            </div >
+                    </div>
+                )}
+            </div>
 
-            {/* History Table - Dark theme */}
-            < div className="bg-card border border-border" >
-                <div className="p-4 border-b border-border">
-                    <h2 className="text-lg font-semibold text-foreground">Histórico de Testes</h2>
+            {/* History Table - Compact */}
+            <div className="bg-card border border-border">
+                <div className="p-3 border-b border-border bg-muted/20">
+                    <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Histórico Recente</h2>
                 </div>
-                <div className="p-4">
+                <div>
                     {attempts.length === 0 ? (
-                        <div className="text-center py-12 text-muted-foreground">
-                            <BarChart2 className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                            <p>Você ainda não realizou nenhum teste.</p>
-                            <p className="text-sm">Complete seu primeiro caso clínico para ver seu desempenho aqui.</p>
+                        <div className="text-center py-8 text-muted-foreground">
+                            <p className="text-sm">Você ainda não realizou nenhum teste.</p>
                         </div>
                     ) : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="border-border hover:bg-secondary/50">
-                                    <TableHead className="text-muted-foreground">Caso Clínico</TableHead>
-                                    <TableHead className="text-muted-foreground">Disciplina</TableHead>
-                                    <TableHead className="text-muted-foreground">Pontuação</TableHead>
-                                    <TableHead className="text-muted-foreground">Data</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {attempts.map((attempt) => (
-                                    <TableRow key={attempt.id} className="border-border hover:bg-secondary/30">
-                                        <TableCell className="font-medium text-foreground">
-                                            {attempt.clinical_cases?.title || "Caso removido"}
-                                        </TableCell>
-                                        <TableCell className="text-muted-foreground">
-                                            {attempt.clinical_cases?.discipline || "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            {getScoreBadge(attempt.score)}
-                                        </TableCell>
-                                        <TableCell className="text-muted-foreground">
-                                            {formatDate(attempt.completed_at)}
-                                        </TableCell>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="border-border hover:bg-transparent">
+                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground w-[40%]">Caso Clínico</TableHead>
+                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground hidden sm:table-cell">Disciplina</TableHead>
+                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground">Nota</TableHead>
+                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground text-right">Data</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {attempts.map((attempt) => (
+                                        <TableRow key={attempt.id} className="border-border hover:bg-secondary/30 transition-colors">
+                                            <TableCell className="font-medium text-xs py-2">
+                                                {attempt.clinical_cases?.title || "Caso removido"}
+                                            </TableCell>
+                                            <TableCell className="text-xs text-muted-foreground py-2 hidden sm:table-cell">
+                                                {attempt.clinical_cases?.discipline || "-"}
+                                            </TableCell>
+                                            <TableCell className="py-2">
+                                                {getScoreBadge(attempt.score)}
+                                            </TableCell>
+                                            <TableCell className="text-xs text-muted-foreground text-right py-2">
+                                                {formatDate(attempt.completed_at)}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     )}
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }

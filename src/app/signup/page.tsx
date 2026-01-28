@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/client";
+import { AuthService } from "@/services/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, ArrowLeft, Stethoscope, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { AuthBackground } from "@/components/auth/auth-background";
 
 
 const signupSchema = z.object({
@@ -30,7 +31,7 @@ export default function SignupPage() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const router = useRouter();
-    const supabase = createClient();
+
 
     const {
         register,
@@ -44,20 +45,17 @@ export default function SignupPage() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signUp({
-            email: data.email,
-            password: data.password,
-            options: {
-                data: {
-                    name: data.name,
-                },
-            },
-        });
+        try {
+            await AuthService.signUp(data.email, data.password, data.name);
+            setSuccess(true);
+            setLoading(false);
 
-        if (error) {
+            setTimeout(() => {
+                router.push("/login");
+            }, 2000);
+        } catch (error: any) {
             setError(error.message);
             setLoading(false);
-            return;
         }
 
         setSuccess(true);
@@ -69,16 +67,14 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="min-h-screen flex bg-[#050505] selection:bg-emerald-500/30 selection:text-emerald-200">
+        <div className="min-h-screen flex bg-[#050505] selection:bg-emerald-500/30 selection:text-emerald-200 overflow-hidden">
             {/* Left Panel - Branding (Igual ao Login para consistência) */}
             <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-[#0a0a0a] border-r border-white/5 flex-col justify-center">
+                {/* RESTORED: User Provided Grid Code (100px) */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]"></div>
+
                 {/* Dynamic Background Effects */}
-                <div className="absolute inset-0">
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
-                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 blur-[100px] rounded-full mix-blend-screen opacity-40" />
-                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-soft-light" />
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
-                </div>
+                <AuthBackground />
 
                 {/* Main Content */}
                 <div className="relative z-10 w-full max-w-2xl px-16">
@@ -89,7 +85,7 @@ export default function SignupPage() {
                                 <Stethoscope className="w-8 h-8 text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
                             </div>
                         </div>
-                        <div>
+                        <div className="px-2">
                             <h1 className="text-4xl text-white flex items-center gap-[3px]">
                                 <span className="font-light text-emerald-400">S</span>
                                 <span className="font-bold">C</span>
@@ -103,7 +99,7 @@ export default function SignupPage() {
                     </div>
 
                     <div className="space-y-6">
-                        <h2 className="text-5xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight">
+                        <h2 className="text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight">
                             Junte-se à <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">
                                 elite médica.
@@ -117,27 +113,33 @@ export default function SignupPage() {
             </div>
 
             {/* Right Panel - Signup Form */}
-            <div className="w-full lg:w-[45%] flex items-center justify-center bg-[#050505] p-8 lg:p-12">
-                <div className="w-full max-w-[420px] animate-in slide-in-from-right-4 duration-700 fade-in">
+            <div className="w-full lg:w-[45%] flex items-center justify-center bg-[#050505] p-8 lg:p-12 relative overflow-hidden">
+                {/* Grid Pattern Overlay (Matching 100px for consistency) */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] opacity-20 pointer-events-none"></div>
+
+                {/* Radial Vignette */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505] pointer-events-none" />
+
+                <div className="w-full max-w-[420px] animate-in slide-in-from-right-4 duration-700 fade-in relative z-10">
 
                     {/* Back Link */}
                     <div className="mb-8">
-                        <Link href="/login" className="inline-flex items-center text-sm text-white/40 hover:text-emerald-400 transition-colors group">
+                        <Link href="/login" className="inline-flex items-center text-sm text-emerald-400/80 hover:text-emerald-400 transition-colors group">
                             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                             Voltar para login
                         </Link>
                     </div>
 
                     {/* Header */}
-                    <div className="mb-10">
-                        <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">Criar conta</h3>
-                        <p className="text-gray-300 text-base font-normal">
+                    <div className="mb-8">
+                        <h3 className="text-3xl font-bold text-white mb-2 tracking-tight">Criar conta</h3>
+                        <p className="text-gray-400 text-sm font-normal">
                             Preencha seus dados para iniciar o cadastro.
                         </p>
                     </div>
 
                     {success && (
-                        <div className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm rounded-xl flex items-center gap-3 animate-in fade-in zoom-in-95">
+                        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm rounded-xl flex items-center gap-3 animate-in fade-in zoom-in-95">
                             <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                             <div>
                                 <span className="font-semibold block mb-0.5">Sucesso!</span>
@@ -147,15 +149,15 @@ export default function SignupPage() {
                     )}
 
                     {error && (
-                        <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 text-red-200 text-sm rounded-xl flex items-center gap-3">
+                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-200 text-sm rounded-xl flex items-center gap-3">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]" />
                             {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="name" className="text-gray-200 text-sm font-medium pl-1">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="name" className="text-gray-300 text-sm font-medium pl-1">
                                 Nome Completo
                             </Label>
                             <Input
@@ -163,15 +165,15 @@ export default function SignupPage() {
                                 type="text"
                                 placeholder="Dr. João Silva"
                                 {...register("name")}
-                                className="h-10 bg-[#1a1a1a] border-white/10 rounded-xl focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-[#202020] transition-all text-white placeholder:text-gray-500 text-base px-5"
+                                className="h-10 bg-[#121212] border-white/5 rounded-lg focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600 text-base px-4 shadow-inner"
                             />
                             {errors.name && (
                                 <p className="text-xs text-red-400 mt-1 pl-1 font-medium">{errors.name.message}</p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="text-gray-200 text-sm font-medium pl-1">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="email" className="text-gray-300 text-sm font-medium pl-1">
                                 Email
                             </Label>
                             <Input
@@ -179,16 +181,16 @@ export default function SignupPage() {
                                 type="email"
                                 placeholder="seu@email.com"
                                 {...register("email")}
-                                className="h-10 bg-[#1a1a1a] border-white/10 rounded-xl focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-[#202020] transition-all text-white placeholder:text-gray-500 text-base px-5"
+                                className="h-10 bg-[#121212] border-white/5 rounded-lg focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 focus:ring-emerald-500/50 focus:border-emerald-500/50 focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600 text-base px-4 shadow-inner"
                             />
                             {errors.email && (
                                 <p className="text-xs text-red-400 mt-1 pl-1 font-medium">{errors.email.message}</p>
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="password" className="text-gray-200 text-sm font-medium pl-1">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="password" className="text-gray-300 text-sm font-medium pl-1">
                                     Senha
                                 </Label>
                                 <Input
@@ -196,15 +198,15 @@ export default function SignupPage() {
                                     type="password"
                                     placeholder="••••••••"
                                     {...register("password")}
-                                    className="h-10 bg-[#1a1a1a] border-white/10 rounded-xl focus:border-emerald-500/50 focus:ring-0 focus:bg-[#202020] transition-all text-white placeholder:text-gray-500 text-base px-5"
+                                    className="h-10 bg-[#121212] border-white/5 rounded-lg focus:border-emerald-500/50 focus:ring-0 focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600 text-base px-4 shadow-inner"
                                 />
                                 {errors.password && (
                                     <p className="text-xs text-red-400 mt-1 pl-1 font-medium">{errors.password.message}</p>
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="confirmPassword" className="text-gray-200 text-sm font-medium pl-1">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="confirmPassword" className="text-gray-300 text-sm font-medium pl-1">
                                     Confirmar
                                 </Label>
                                 <Input
@@ -212,7 +214,7 @@ export default function SignupPage() {
                                     type="password"
                                     placeholder="••••••••"
                                     {...register("confirmPassword")}
-                                    className="h-10 bg-[#1a1a1a] border-white/10 rounded-xl focus:border-emerald-500/50 focus:ring-0 focus:bg-[#202020] transition-all text-white placeholder:text-gray-500 text-base px-5"
+                                    className="h-10 bg-[#121212] border-white/5 rounded-lg focus:border-emerald-500/50 focus:ring-0 focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600 text-base px-4 shadow-inner"
                                 />
                                 {errors.confirmPassword && (
                                     <p className="text-xs text-red-400 mt-1 pl-1 font-medium">{errors.confirmPassword.message}</p>
@@ -224,7 +226,7 @@ export default function SignupPage() {
                             type="submit"
                             variant="gradient"
                             size="lg"
-                            className="w-full mt-4 text-base font-semibold shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] transition-all rounded-xl"
+                            className="w-full mt-2 h-11 text-base font-semibold shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] transition-all rounded-lg"
                             disabled={loading || success}
                         >
                             {loading ? (
@@ -235,9 +237,9 @@ export default function SignupPage() {
                         </Button>
                     </form>
 
-                    <p className="text-center text-sm text-gray-300 mt-10 font-normal">
+                    <p className="text-center text-sm text-gray-500 mt-8 font-normal">
                         Já possui uma conta?{" "}
-                        <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors hover:underline underline-offset-4">
+                        <Link href="/login" className="text-emerald-500 text-opacity-80 hover:text-emerald-400 font-medium transition-colors hover:underline underline-offset-4">
                             Fazer login
                         </Link>
                     </p>

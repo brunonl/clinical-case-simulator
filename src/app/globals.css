@@ -110,6 +110,7 @@
   --background: var(--surface-1);
   --foreground: #f8fafc;
   /* Slate 50 (Softer White) */
+  --background-deep: #050505;
 
   --card: var(--surface-2);
   --card-foreground: #f8fafc;

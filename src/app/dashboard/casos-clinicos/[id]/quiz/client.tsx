@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, ArrowLeft, ArrowRight, Trophy, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { QuizService } from "@/services/quiz";
 import { cn } from "@/lib/utils";
 import type { ClinicalCase } from "@/lib/supabase/types";
 
@@ -25,7 +25,6 @@ interface QuizClientProps {
 
 export function QuizClient({ clinicalCase }: QuizClientProps) {
     const router = useRouter();
-    const supabase = createClient();
 
     // Parse questions from JSONB column
     const questions: QuestionJSON[] = Array.isArray(clinicalCase.questions)
@@ -87,29 +86,19 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
         const finalScore = (correctCount / totalQuestions) * 100;
         setScore(finalScore);
 
-        // Save attempt to database
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (user) {
-            const { error } = await supabase.from("quiz_attempts").insert({
-                user_id: user.id,
-                case_id: clinicalCase.id, // Column name in recent migration
-                answers: answers,
-                score: finalScore,
-            });
-
-            if (error) {
-                console.error("Error saving attempt:", error);
-                // Fallback for older schema if needed (clinical_case_id)
-                if (error.message.includes("column \"case_id\" of relation \"quiz_attempts\" does not exist")) {
-                    await supabase.from("quiz_attempts").insert({
-                        user_id: user.id,
-                        case_id: clinicalCase.id,
-                        answers: answers,
-                        score: finalScore,
-                    });
-                }
+        // Save attempt to database via Service
+        try {
+            const user = await QuizService.getUser();
+            if (user) {
+                await QuizService.saveAttempt({
+                    userId: user.id,
+                    caseId: clinicalCase.id,
+                    answers: answers,
+                    score: finalScore
+                });
             }
+        } catch (error) {
+            console.error("Error saving attempt via service:", error);
         }
 
         setSaving(false);
@@ -125,88 +114,88 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
         const isPassing = score >= 70;
 
         return (
-            <div className="max-w-3xl mx-auto animate-in fade-in duration-500">
+            <div className="max-w-2xl mx-auto animate-in fade-in duration-500">
                 <Card className="surface-card border-border shadow-2xl">
-                    <CardHeader className="text-center border-b border-border/50 pb-8 pt-8">
-                        <div className="flex justify-center mb-6">
+                    <CardHeader className="text-center border-b border-border/50 py-6">
+                        <div className="flex justify-center mb-4">
                             <div className={cn(
-                                "w-12 h-12 rounded-none flex items-center justify-center border-2",
+                                "w-10 h-10 rounded-none flex items-center justify-center border-2",
                                 isPassing
                                     ? "bg-emerald-500/10 border-emerald-500 text-emerald-500"
                                     : "bg-red-500/10 border-red-500 text-red-500"
                             )}>
-                                <Trophy className="w-6 h-6" />
+                                <Trophy className="w-5 h-5" />
                             </div>
                         </div>
-                        <CardTitle className="text-xl font-bold tracking-tight">
+                        <CardTitle className="text-lg font-bold tracking-tight">
                             {isPassing ? "Excelente desempenho!" : "Bom esforço!"}
                         </CardTitle>
-                        <p className="text-muted-foreground mt-2">
+                        <p className="text-muted-foreground mt-1 text-sm">
                             {isPassing
                                 ? "Você demonstrou domínio sobre este caso clinico."
                                 : "Revise os conceitos e tente novamente para melhorar."}
                         </p>
                     </CardHeader>
-                    <CardContent className="space-y-8 pt-8">
+                    <CardContent className="space-y-6 pt-4">
                         <div className="text-center">
                             <div className={cn(
-                                "text-4xl font-black mb-2 tracking-tighter",
+                                "text-3xl font-black mb-1 tracking-tighter",
                                 isPassing ? "text-emerald-500" : "text-amber-500"
                             )}>
                                 {score.toFixed(0)}%
                             </div>
-                            <p className="text-muted-foreground uppercase tracking-widest text-xs font-semibold">Nota Final</p>
+                            <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-semibold">Nota Final</p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-emerald-500/10 border border-emerald-500/20 p-6 text-center">
-                                <div className="flex items-center justify-center gap-3 text-emerald-500 mb-2">
-                                    <CheckCircle className="w-6 h-6" />
-                                    <span className="text-3xl font-bold">{correctCount}</span>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 text-center">
+                                <div className="flex items-center justify-center gap-2 text-emerald-500 mb-1">
+                                    <CheckCircle className="w-5 h-5" />
+                                    <span className="text-2xl font-bold">{correctCount}</span>
                                 </div>
-                                <p className="text-xs text-emerald-400 font-medium uppercase">Acertos</p>
+                                <p className="text-[10px] text-emerald-400 font-medium uppercase">Acertos</p>
                             </div>
-                            <div className="bg-red-500/10 border border-red-500/20 p-6 text-center">
-                                <div className="flex items-center justify-center gap-3 text-red-500 mb-2">
-                                    <XCircle className="w-6 h-6" />
-                                    <span className="text-3xl font-bold">{incorrectCount}</span>
+                            <div className="bg-red-500/10 border border-red-500/20 p-4 text-center">
+                                <div className="flex items-center justify-center gap-2 text-red-500 mb-1">
+                                    <XCircle className="w-5 h-5" />
+                                    <span className="text-2xl font-bold">{incorrectCount}</span>
                                 </div>
-                                <p className="text-xs text-red-400 font-medium uppercase">Erros</p>
+                                <p className="text-[10px] text-red-400 font-medium uppercase">Erros</p>
                             </div>
                         </div>
 
                         {/* Review Section */}
-                        <div className="space-y-4 pt-4">
-                            <h3 className="font-semibold text-lg flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-muted-foreground" />
+                        <div className="space-y-3 pt-2">
+                            <h3 className="font-semibold text-base flex items-center gap-2">
+                                <CheckCircle className="w-4 h-4 text-muted-foreground" />
                                 Revisão Detalhada
                             </h3>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {questions.map((q, index) => {
                                     const userAnswer = answers[q.id];
                                     const isCorrect = userAnswer === q.correct;
 
                                     return (
                                         <div key={q.id} className={cn(
-                                            "p-4 border-l-4 transition-all hover:bg-white/5",
+                                            "p-3 border-l-2 transition-all hover:bg-white/5",
                                             isCorrect
                                                 ? "border-l-emerald-500 bg-emerald-500/5"
                                                 : "border-l-red-500 bg-red-500/5"
                                         )}>
                                             <div className="flex items-start gap-3">
-                                                <div className="mt-1 flex-shrink-0">
+                                                <div className="mt-0.5 flex-shrink-0">
                                                     <span className="text-[10px] font-mono opacity-50">#{index + 1}</span>
                                                 </div>
-                                                <div className="flex-1 space-y-2">
-                                                    <p className="font-medium text-sm leading-relaxed">
+                                                <div className="flex-1 space-y-1.5">
+                                                    <p className="font-medium text-xs leading-relaxed">
                                                         {q.question}
                                                     </p>
 
-                                                    <div className="grid gap-1.5 text-xs">
-                                                        <div className="flex flex-col gap-1">
-                                                            <span className="text-muted-foreground text-xs uppercase">Sua Resposta</span>
+                                                    <div className="grid gap-1 text-[10px]">
+                                                        <div className="flex flex-col gap-0.5">
+                                                            <span className="text-muted-foreground uppercase opacity-70">Sua Resposta</span>
                                                             <span className={cn(
-                                                                "font-medium flex items-center gap-2",
+                                                                "font-medium flex items-center gap-1.5",
                                                                 isCorrect ? "text-emerald-400" : "text-red-400"
                                                             )}>
                                                                 {isCorrect ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
@@ -215,9 +204,9 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                                                         </div>
 
                                                         {!isCorrect && (
-                                                            <div className="flex flex-col gap-1 mt-1">
-                                                                <span className="text-muted-foreground text-xs uppercase">Correta</span>
-                                                                <span className="text-emerald-400 font-medium flex items-center gap-2">
+                                                            <div className="flex flex-col gap-0.5 mt-1">
+                                                                <span className="text-muted-foreground uppercase opacity-70">Correta</span>
+                                                                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
                                                                     <CheckCircle className="w-3 h-3" />
                                                                     {q.options[q.correct]}
                                                                 </span>
@@ -232,11 +221,11 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                             </div>
                         </div>
 
-                        <div className="flex justify-center gap-4 pt-6 border-t border-border">
-                            <Button variant="outline" onClick={() => router.push("/dashboard/desempenho")} className="w-40 border-border hover:bg-secondary" size="lg">
+                        <div className="flex justify-center gap-3 pt-4 border-t border-border">
+                            <Button variant="outline" onClick={() => router.push("/dashboard/desempenho")} className="w-32 h-9 text-xs border-border hover:bg-secondary">
                                 Ver Dashboard
                             </Button>
-                            <Button onClick={() => router.push("/dashboard/casos-clinicos")} className="w-40 gradient-tile-a hover:brightness-110 text-white border-0" size="lg">
+                            <Button onClick={() => router.push("/dashboard/casos-clinicos")} className="w-32 h-9 text-xs gradient-tile-a hover:brightness-110 text-white border-0">
                                 Novo Caso
                             </Button>
                         </div>
@@ -344,10 +333,9 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                     variant="ghost"
                     onClick={handlePrevious}
                     disabled={currentIndex === 0}
-                    className="w-40 text-muted-foreground hover:text-white hover:bg-secondary"
-                    size="lg"
+                    className="h-10 text-sm text-muted-foreground hover:text-white hover:bg-secondary"
                 >
-                    <ArrowLeft className="w-5 h-5 mr-2" />
+                    <ArrowLeft className="w-4 h-4 mr-2" />
                     Anterior
                 </Button>
 
@@ -355,19 +343,19 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                     <Button
                         onClick={handleFinish}
                         disabled={!allAnswered || saving}
-                        variant="gradient" size="lg" className="w-40"
+                        variant="gradient" className="h-10 px-8 text-sm" // Removed size="lg"
                     >
-                        {saving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <CheckCircle className="w-5 h-5 mr-2" />}
+                        {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
                         {saving ? "Finalizando..." : "Finalizar Prova"}
                     </Button>
                 ) : (
                     <Button
                         onClick={handleNext}
                         disabled={!isAnswered(currentQuestion.id)}
-                        variant="gradient" size="lg" className="w-40"
+                        variant="gradient" className="h-10 px-8 text-sm" // Removed size="lg"
                     >
                         Próxima Questão
-                        <ArrowRight className="w-5 h-5 ml-2" />
+                        <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                 )}
             </div>
