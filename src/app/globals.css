@@ -1,0 +1,276 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================================
+   DESIGN SYSTEM: Dark Theme + Flat Design (Zero Border-Radius)
+   Clinical Case Simulator
+   ============================================================================ */
+
+@theme inline {
+  /* Core Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Component Colors */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  /* Chart Colors */
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  /* UI Colors */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* =========================================
+     FLAT DESIGN: Zero Border-Radius Global
+     ========================================= */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+
+  /* Dashboard Tile Colors (Refined Clinical Palette) 
+     Less Neon, More Professional Deep Tones */
+  --color-tile-a-from: #115e59;
+  /* Teal 800 */
+  --color-tile-a-to: #2dd4bf;
+  /* Teal 400 */
+
+  --color-tile-b-from: #0c4a6e;
+  /* Sky 900 */
+  --color-tile-b-to: #38bdf8;
+  /* Sky 400 */
+
+  --color-tile-c-from: #1e3a8a;
+  /* Blue 900 */
+  --color-tile-c-to: #60a5fa;
+  /* Blue 400 */
+
+  --color-tile-d-from: #312e81;
+  /* Indigo 900 */
+  --color-tile-d-to: #818cf8;
+  /* Indigo 400 */
+
+  --color-tile-e-from: #172554;
+  /* Slate/Blue 950 */
+  --color-tile-e-to: #3b82f6;
+  /* Blue 500 (Vibrant Exit) */
+}
+
+/* ============================================================================
+   DARK THEME (Default)
+   ============================================================================ */
+:root {
+  /* FLAT DESIGN: Zero border-radius */
+  --radius: 0;
+
+  /* Modern Dark Hierarchy - Reduced Contrast Strain */
+  --surface-0: #020617;
+  /* Slate 950 (Not Pitch Black) */
+  --surface-1: #0f172a;
+  /* Slate 900 (Deep, Rich Background) */
+  --surface-2: #1e293b;
+  /* Slate 800 (Cards) */
+  --surface-3: #334155;
+  /* Slate 700 (Highlight) */
+
+  /* Dark Theme as Default */
+  --background: var(--surface-1);
+  --foreground: #f8fafc;
+  /* Slate 50 (Softer White) */
+
+  --card: var(--surface-2);
+  --card-foreground: #f8fafc;
+
+  --popover: var(--surface-2);
+  --popover-foreground: #f8fafc;
+
+  --primary: #f8fafc;
+  --primary-foreground: #020617;
+
+  --secondary: var(--surface-3);
+  --secondary-foreground: #f8fafc;
+
+  --muted: var(--surface-3);
+  --muted-foreground: #94a3b8;
+  /* Slate 400 */
+
+  --accent: var(--surface-3);
+  --accent-foreground: #f8fafc;
+
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f8fafc;
+
+  --border: #1e293b;
+  /* Softer Border */
+  --input: #1e293b;
+  --ring: #38bdf8;
+  /* Focus Ring matches Teal */
+
+  /* Chart Colors */
+  --chart-1: #2dd4bf;
+  --chart-2: #38bdf8;
+  --chart-3: #60a5fa;
+  --chart-4: #818cf8;
+  --chart-5: #3b82f6;
+
+  /* Sidebar */
+  --sidebar: var(--surface-0);
+  --sidebar-foreground: #cbd5e1;
+  /* Slate 300 (Softer Text) */
+  --sidebar-primary: #f8fafc;
+  --sidebar-primary-foreground: #020617;
+  --sidebar-accent: var(--surface-2);
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #38bdf8;
+}
+
+/* Light Mode Override (Optional) */
+.light {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #f8fafc;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #f8fafc;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0f172a;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #0f172a;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #0f172a;
+}
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    /* Force zero border-radius on all elements */
+    border-radius: 0 !important;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Subtle Grain Texture (Reduced Contrast) */
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
+  /* Flat Design: Remove all rounded corners */
+  button,
+  input,
+  select,
+  textarea,
+  [class*="rounded"],
+  [class*="radius"] {
+    border-radius: 0 !important;
+  }
+
+  /* Global Scrollbar Dark Theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--surface-1);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--surface-3);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--surface-3);
+    filter: brightness(1.2);
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+@layer utilities {
+
+  /* Tile Gradients - Refined & Smoother */
+  .gradient-tile-a {
+    background: linear-gradient(110deg, var(--color-tile-a-from) 0%, var(--color-tile-a-to) 100%);
+  }
+
+  .gradient-tile-b {
+    background: linear-gradient(110deg, var(--color-tile-b-from) 0%, var(--color-tile-b-to) 100%);
+  }
+
+  .gradient-tile-c {
+    background: linear-gradient(110deg, var(--color-tile-c-from) 0%, var(--color-tile-c-to) 100%);
+  }
+
+  .gradient-tile-d {
+    background: linear-gradient(110deg, var(--color-tile-d-from) 0%, var(--color-tile-d-to) 100%);
+  }
+
+  .gradient-tile-e {
+    background: linear-gradient(110deg, var(--color-tile-e-from) 0%, var(--color-tile-e-to) 100%);
+  }
+
+  /* Dark overlay for tile bars - More Integrated */
+  .tile-bar {
+    background: linear-gradient(90deg, rgba(2, 6, 23, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Modern Glass/Surface Utility */
+  .surface-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+}
