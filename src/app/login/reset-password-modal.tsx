@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createClient } from "@/lib/supabase/client";
+import { AuthService } from "@/services/auth";
 
 interface ResetPasswordModalProps {
     isOpen: boolean;
@@ -11,22 +11,18 @@ interface ResetPasswordModalProps {
 export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps) {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
-    const supabase = createClient();
 
     if (!isOpen) return null;
 
     const handleReset = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/auth/update-password`,
-        });
-
-        if (error) {
-            alert("Erro: " + error.message);
-        } else {
+        try {
+            await AuthService.resetPasswordForEmail(email);
             alert("Email enviado com sucesso!");
             onClose();
+        } catch (error: any) {
+            alert("Erro: " + error.message);
         }
         setLoading(false);
     };

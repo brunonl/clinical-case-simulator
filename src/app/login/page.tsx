@@ -267,6 +267,10 @@ export default function LoginPage() {
                     </p>
                 </div>
             </div>
+            <ResetPasswordModal
+                isOpen={showReset}
+                onClose={() => setShowReset(false)}
+            />
         </div>
     );
 }
