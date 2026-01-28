@@ -25,10 +25,16 @@ export function Header() {
         setLoading(true);
         try {
             await AuthService.signOut();
+            router.refresh(); // Clear server component cache
             router.push("/login");
         } catch (error) {
             console.error("Logout error:", error);
-            setLoading(false);
+            // Force redirect even on error to prevent stuck state
+            router.push("/login");
+        } finally {
+            // Loading state will be unmounted with redirect, but good practice
+            // if navigation is cancelled or delayed
+            // setLoading(false); 
         }
     };
 
