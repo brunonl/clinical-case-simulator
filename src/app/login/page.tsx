@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Stethoscope, ArrowRight, Loader2, Copy, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { ResetPasswordModal } from "./reset-password-modal";
+
 import { FullScreenLoader } from "@/components/ui/loaders";
 import { AuthBackground } from "@/components/auth/auth-background";
 
@@ -25,7 +25,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [showReset, setShowReset] = useState(false);
+
     const [copied, setCopied] = useState(false);
 
 
@@ -200,13 +200,7 @@ export default function LoginPage() {
                                 <Label htmlFor="password" className="text-gray-300 text-sm font-medium">
                                     Senha
                                 </Label>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowReset(true)}
-                                    className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
-                                >
-                                    Recuperar acesso
-                                </button>
+
                             </div>
                             <Input
                                 id="password"
@@ -267,10 +261,7 @@ export default function LoginPage() {
                     </p>
                 </div>
             </div>
-            <ResetPasswordModal
-                isOpen={showReset}
-                onClose={() => setShowReset(false)}
-            />
+
         </div>
     );
 }
