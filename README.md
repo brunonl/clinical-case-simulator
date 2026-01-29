@@ -1,4 +1,4 @@
-# Clinical Case Simulator
+# Simulador de Casos Clínicos
 
 Um simulador médico interativo desenvolvido para demonstrar a aplicação prática de tecnologias modernas como **Next.js 16 (App Router)** e **React 19**, com foco em usabilidade, performance e qualidade de código.
 
