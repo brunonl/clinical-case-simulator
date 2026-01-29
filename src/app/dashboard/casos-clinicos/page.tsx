@@ -1,12 +1,23 @@
-import { ClinicalCasesServerService } from "@/services/server/clinical-cases";
-import CasosClinicosClient from "./client";
+import { createClient } from "@/lib/supabase/server";
+import { CasosClinicosClient } from "./client";
 
 export default async function CasosClinicosPage() {
-    // Fetch data via Server Service
-    const [institutions, cases] = await Promise.all([
-        ClinicalCasesServerService.getInstitutions(),
-        ClinicalCasesServerService.getAll()
-    ]);
+    const supabase = await createClient();
+
+    // Fetch institutions
+    const { data: institutions } = await supabase
+        .from("institutions")
+        .select("*")
+        .order("name");
+
+    // Fetch clinical cases with institution name
+    const { data: cases } = await supabase
+        .from("clinical_cases")
+        .select(`
+      *,
+      institutions (name)
+    `)
+        .order("code");
 
     return (
         <CasosClinicosClient

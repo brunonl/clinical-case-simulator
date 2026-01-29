@@ -1,120 +1,87 @@
-# SCC - Simulador de Casos Clínicos
+# Clinical Case Simulator
 
-<div align="center">
+Um simulador médico imersivo desenvolvido para demonstrar domínio em **Next.js 16 (App Router)**, **React 19** e **Arquitetura Front-end Moderna**, unindo precisão técnica com uma experiência de usuário premium.
 
-[![Next.js 14](https://img.shields.io/badge/Next.js-14.0-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-Auth_&_DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+🔗 **[Acesse a demonstração ao vivo](https://clinical-case-simulator.vercel.app/)**
 
-<br />
-
-> **A plataforma definitiva para simulações médicas realistas e preparação avançada.**
-
-[Demonstração ao Vivo](https://clinical-case-simulator.vercel.app/login) · [Relatar Bug](https://github.com/seu-usuario/clinical-case-simulator/issues) · [Solicitar Feature](https://github.com/seu-usuario/clinical-case-simulator/issues)
-
-</div>
+![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
 ---
 
-## 📖 Visão Geral
+## 🚀 Visão Geral
 
-O **SCC (Simulador de Casos Clínicos)** é uma aplicação web moderna e imersiva desenvolvida para capacitação de profissionais de saúde. Focada em **UX refinada** e **performance**, a plataforma oferece um ambiente prático para resolução de casos clínicos complexos.
+O **SCC (Simulador de Casos Clínicos)** é uma plataforma de educação médica que oferece cenários clínicos interativos. Diferente de sistemas tradicionais, ele foca em **UX refinada**, **feedback em tempo real** e **acessibilidade**, simulando a pressão e a tomada de decisão do ambiente médico real.
 
-O projeto foi construído seguindo um design "Dark Mode First", utilizando as mais recentes tecnologias do ecossistema React para garantir escalabilidade, acessibilidade e uma experiência de uso premium.
+## 👨‍💻 Destaques Técnicos (Para Recrutadores)
 
-## ✨ Funcionalidades Principais
+Este projeto foi construído na "bleeding edge" do ecossistema React, utilizando tecnologias que definem o padrão moderno de desenvolvimento web:
 
-- **Simulações Realistas:** Navegação interativa por casos clínicos com feedback imediato.
-- **Autenticação Segura:** Login, Cadastro e Recuperação de Senha gerenciados via Supabase Auth com proteção de rotas via Middleware.
-- **Interface Premium:** Design System completo construído com Tailwind CSS e componentes acessíveis Shadcn/UI (Radix).
-- **Alta Performance:** Otimização SEO e Server-Side Rendering (SSR) com Next.js App Router.
-- **Design Responsivo:** Layout adaptável para desktop, tablets e dispositivos móveis.
-
-## 🚀 Demonstração & Acesso
-
-Para fins de avaliação ou testes, utilize as credenciais de recrutador abaixo:
-
-| Perfil | Email | Senha |
-| :--- | :--- | :--- |
-| **Recrutador** | `admin@scc.com` | `admin123` |
-
----
+- **Next.js 16 & React 19**: Adoção antecipada das versões mais recentes para explorar Server Actions, melhorias de hidratação e otimizações de compilador.
+- **Tailwind CSS v4**: Utilização da nova engine de estilos (Oxide) para builds instantâneos e performance CSS nativa superior.
+- **Arquitetura "Feature-First"**: Organização do código por domínios (`(auth)`, `dashboard`), facilitando a escalabilidade e manutenção em times grandes.
+- **Type Safety Rigorosa**: Integração profunda entre **TypeScript** e **Zod** para validação de dados end-to-end (do banco de dados ao formulário), eliminando erros em tempo de execução.
+- **Componentização Avançada**: Design System construído sobre **Shadcn/UI** (Radix Primitives), garantindo acessibilidade (WAI-ARIA) e consistência visual sem "travar" a customização.
 
 ## 🛠️ Stack Tecnológica
 
-A arquitetura foi desenhada priorizando **segurança de tipos** (Type Safety) e **Developer Experience**.
-
-### Core
-- **[Next.js 14](https://nextjs.org/)** (App Router) - Framework React full-stack.
-- **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática rigorosa.
-
-### Interface & Estilo
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework.
-- **[Shadcn/UI](https://ui.shadcn.com/)** - Componentes de interface reutilizáveis.
-- **[Lucide React](https://lucide.dev/)** - Ícones vetoriais leves.
-- **[Zod](https://zod.dev/)** - Validação de schemas e dados.
-
-### Backend & Serviços
-- **[Supabase](https://supabase.com/)** - Backend-as-a-Service (PostgreSQL, Auth, Realtime).
+- **Core**: Next.js 16 (App Router), React 19, TypeScript
+- **Estilização**: Tailwind CSS v4, Shadcn/UI, Lucide React
+- **Backend/Services**: Supabase (Auth, PostgreSQL, Realtime)
+- **State/Forms**: React Hook Form, Zod, Server Actions
 
 ---
 
-## 🏗️ Arquitetura do Projeto
+## 🏗️ Estrutura do Projeto
 
-A estrutura de pastas segue uma organização por domínio, maximizando a manutenibilidade:
+A organização segue uma abordagem modular, isolando responsabilidades e facilitando testes:
 
 ```bash
 src/
-├── app/                  # Rotas e Páginas (Next.js App Router)
-│   ├── (auth)/           # Grupo de rotas de autenticação
-│   ├── dashboard/        # Área protegida da aplicação
-│   └── layout.tsx        # Layout raiz
-├── components/           # Biblioteca de Componentes
-│   ├── auth/             # Componentes específicos de Auth
-│   ├── dashboard/        # Componentes de negócio do Dashboard
-│   └── ui/               # Componentes base (Botões, Modais, Inputs)
-├── lib/                  # Configurações e Utilitários (Supabase client, utils)
-├── services/             # Camada de Serviço (Abstração de chamadas API)
-└── types/                # Definições de Tipos Globais (TypeScript)
+├── app/
+│   ├── (auth)/           # Rotas públicas de autenticação
+│   ├── dashboard/        # Área logada (Protegida por Middleware)
+│   └── api/              # Route Handlers (quando Server Actions não bastam)
+├── components/
+│   ├── ui/               # Design System (Botões, Modais, Inputs)
+│   └── dashboard/        # Componentes de negócio específicos
+├── lib/                  # Configurações de infra (Supabase, Utils)
+└── types/                # Definições de Tipos globais
 ```
 
-## 🏁 Instalação e Execução
+## 🔧 Instalação e Execução
 
-Siga os passos abaixo para rodar o projeto localmente:
+O projeto está pronto para rodar localmente:
 
-1. **Clone o repositório**
+1. **Clone o repositório:**
    ```bash
    git clone https://github.com/seu-usuario/clinical-case-simulator.git
    cd clinical-case-simulator
    ```
 
-2. **Instale as dependências**
+2. **Instale as dependências:**
    ```bash
    npm install
-   # ou
-   yarn install
    ```
 
-3. **Configure o ambiente**
-   Crie um arquivo `.env.local` na raiz do projeto com suas chaves do Supabase:
+3. **Configure as Variáveis:**
+   Crie um arquivo `.env.local` com suas chaves do Supabase:
    ```env
-   NEXT_PUBLIC_SUPABASE_URL=sua_url_supabase
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima
+   NEXT_PUBLIC_SUPABASE_URL=sua_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_key
    ```
 
-4. **Inicie o servidor**
+4. **Execute:**
    ```bash
    npm run dev
    ```
-
-A aplicação estará disponível em `http://localhost:3000`.
+   Acesse via `http://localhost:3000`.
 
 ---
 
-<div align="center">
-  Desenvolvido com 💙 por [Seu Nome]
-  <br />
-  <sup>Clinical Case Simulator © 2024</sup>
-</div>
+## 📄 Licença
 
+Este projeto está licenciado sob a licença MIT.
