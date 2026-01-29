@@ -1,8 +1,13 @@
 # Clinical Case Simulator
 
-Um simulador médico imersivo desenvolvido para demonstrar domínio em **Next.js 16 (App Router)**, **React 19** e **Arquitetura Front-end Moderna**, unindo precisão técnica com uma experiência de usuário premium.
+Um simulador médico interativo desenvolvido para demonstrar a aplicação prática de tecnologias modernas como **Next.js 16 (App Router)** e **React 19**, com foco em usabilidade, performance e qualidade de código.
 
 🔗 **[Acesse a demonstração ao vivo](https://clinical-case-simulator.vercel.app/)**
+
+### 🔐 Credenciais para Recrutadores
+Para testar a plataforma sem criar uma conta, utilize:
+- **Email:** `admin@scc.com`
+- **Senha:** `admin123`
 
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -12,83 +17,63 @@ Um simulador médico imersivo desenvolvido para demonstrar domínio em **Next.js
 
 ---
 
-## 🚀 Visão Geral
+## 🚀 O Projeto
 
-O **SCC (Simulador de Casos Clínicos)** é uma plataforma de educação médica que oferece cenários clínicos interativos. Diferente de sistemas tradicionais, ele foca em **UX refinada**, **feedback em tempo real** e **acessibilidade**, simulando a pressão e a tomada de decisão do ambiente médico real.
+O **SCC (Simulador de Casos Clínicos)** é uma plataforma educacional que permite a estudantes e profissionais de medicina treinarem suas habilidades de diagnóstico em um ambiente seguro e controlado. O sistema oferece casos clínicos detalhados com multimídia, quizzes interativos e feedback imediato.
 
-## 👨‍💻 Destaques Técnicos (Para Recrutadores)
+Principais funcionalidades:
+- **Autenticação Segura**: Login simplificado via Google ou e-mail corporativo.
+- **Simulação Realista**: Apresentação de casos com histórico, exames, áudios (ausculta) e imagens.
+- **Avaliação Interativa**: Quizzes dinâmicos para testar o raciocínio clínico.
+- **Dashboard de Desempenho**: Acompanhamento do progresso e histórico de casos resolvidos.
 
-Este projeto foi construído na "bleeding edge" do ecossistema React, utilizando tecnologias que definem o padrão moderno de desenvolvimento web:
+## 💻 Aspectos Técnicos
 
-- **Next.js 16 & React 19**: Adoção antecipada das versões mais recentes para explorar Server Actions, melhorias de hidratação e otimizações de compilador.
-- **Tailwind CSS v4**: Utilização da nova engine de estilos (Oxide) para builds instantâneos e performance CSS nativa superior.
-- **Arquitetura "Feature-First"**: Organização do código por domínios (`(auth)`, `dashboard`), facilitando a escalabilidade e manutenção em times grandes.
-- **Type Safety Rigorosa**: Integração profunda entre **TypeScript** e **Zod** para validação de dados end-to-end (do banco de dados ao formulário), eliminando erros em tempo de execução.
-- **Componentização Avançada**: Design System construído sobre **Shadcn/UI** (Radix Primitives), garantindo acessibilidade (WAI-ARIA) e consistência visual sem "travar" a customização.
+Este projeto reflete práticas atuais de desenvolvimento web, priorizando manutenibilidade e experiência do desenvolvedor:
 
-## 🛠️ Stack Tecnológica
+- **Next.js 16 & React 19**: Uso de Server Components e Server Actions para uma aplicação rápida e otimizada.
+- **Tailwind CSS v4**: Estilização moderna e performática, utilizando a nova engine para builds mais rápidos.
+- **Arquitetura Modular**: O código é organizado por domínios funcionais, facilitando a navegação e o entendimento da estrutura.
+- **TypeScript & Zod**: Tipagem estática e validação de esquemas para garantir a integridade dos dados em toda a aplicação.
+- **Interface Polida**: Componentes UI reutilizáveis baseados no Shadcn/UI, garantindo consistência visual e acessibilidade.
 
-- **Core**: Next.js 16 (App Router), React 19, TypeScript
-- **Estilização**: Tailwind CSS v4, Shadcn/UI, Lucide React
-- **Backend/Services**: Supabase (Auth, PostgreSQL, Realtime)
-- **State/Forms**: React Hook Form, Zod, Server Actions
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript
+- **Estilos**: Tailwind CSS, Shadcn/UI, Lucide React
+- **Backend & Auth**: Supabase (PostgreSQL, Auth)
+- **Gerenciamento de Estado/Forms**: React Hook Form, Zod
 
 ## 🎨 Design System
 
-O projeto inclui um **Design System documentado** com Storybook, contendo todos os componentes UI, suas variantes e guidelines de uso.
+O projeto conta com um sistema de design documentado via Storybook, facilitando a reutilização e teste isolado de componentes como botões, cards e inputs.
 
-📖 **[Acesse o Design System](https://main--697ba3867e42ce1866dd5951.chromatic.com)**
+📖 **[Ver Design System](https://main--697ba3867e42ce1866dd5951.chromatic.com)**
 
-### Componentes Documentados
-
-- **Button** - Variantes: default, gradient, outline, ghost, destructive + tamanhos
-- **Card** - Superfícies com diferentes elevações
-- **Badge** - Status e categorias
-- **Input** - Campos de formulário com estados
-- **Progress** - Indicadores de progresso
-- **Typography** - Sistema de tipografia semântica
-
-### Executar Storybook Localmente
-
+Para rodar o Storybook localmente:
 ```bash
 npm run storybook
-# Acesse http://localhost:6006
+# Abre em http://localhost:6006
 ```
 
-### Classes CSS Utilitárias
+## 🏗️ Estrutura de Diretórios
 
-O design system inclui classes CSS globais via `@apply`:
-
-| Categoria | Classes |
-|-----------|---------|
-| **Tipografia** | `.text-display`, `.text-heading-1`, `.text-body`, `.text-caption` |
-| **Formulários** | `.form-group`, `.form-label`, `.form-input`, `.form-error` |
-| **Layout** | `.section-container`, `.flex-center`, `.flex-between` |
-| **Superfícies** | `.surface-card`, `.surface-elevated`, `.surface-interactive` |
-| **Overlays** | `.overlay-backdrop`, `.overlay-content` |
-
----
-
-## 🏗️ Estrutura do Projeto
-
-A organização segue uma abordagem modular, isolando responsabilidades e facilitando testes:
-
-```bash
+```
 src/
 ├── app/
-│   ├── (auth)/           # Rotas públicas de autenticação
-│   ├── dashboard/        # Área logada (Protegida por Middleware)
-│   └── api/              # Route Handlers (quando Server Actions não bastam)
+│   ├── (auth)/           # Páginas de Login e Cadastro
+│   ├── dashboard/        # Área restrita (Casos, Perfil)
+│   └── api/              # Endpoints da API
 ├── components/
-│   ├── ui/               # Design System (Botões, Modais, Inputs)
-│   └── dashboard/        # Componentes de negócio específicos
-├── lib/                  # Configurações de infra (Supabase, Utils)
-└── types/                # Definições de Tipos globais
+│   ├── ui/               # Componentes base (Design System)
+│   └── ...               # Componentes específicos por funcionalidade
+├── lib/                  # Utilitários e configurações (Supabase Client)
+└── types/                # Definições de tipos TypeScript
 ```
 
-## 🔧 Instalação e Execução
+## 🔧 Como Executar Localmente
 
-O projeto está pronto para rodar localmente:
+Siga os passos abaixo para rodar o projeto em sua máquina:
 
 1. **Clone o repositório:**
    ```bash
@@ -101,21 +86,20 @@ O projeto está pronto para rodar localmente:
    npm install
    ```
 
-3. **Configure as Variáveis:**
-   Crie um arquivo `.env.local` com suas chaves do Supabase:
+3. **Configure as Variáveis de Ambiente:**
+   Crie um arquivo `.env.local` na raiz do projeto com suas credenciais do Supabase:
    ```env
-   NEXT_PUBLIC_SUPABASE_URL=sua_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_key
+   NEXT_PUBLIC_SUPABASE_URL=sua_url_do_supabase
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima
    ```
 
-4. **Execute:**
+4. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
-   Acesse via `http://localhost:3000`.
+   Acesse a aplicação em `http://localhost:3000`.
 
 ---
 
 ## 📄 Licença
-
-Este projeto está licenciado sob a licença MIT.
+Distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais informações.
