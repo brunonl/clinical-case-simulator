@@ -33,6 +33,40 @@ Este projeto foi construído na "bleeding edge" do ecossistema React, utilizando
 - **Backend/Services**: Supabase (Auth, PostgreSQL, Realtime)
 - **State/Forms**: React Hook Form, Zod, Server Actions
 
+## 🎨 Design System
+
+O projeto inclui um **Design System documentado** com Storybook, contendo todos os componentes UI, suas variantes e guidelines de uso.
+
+📖 **[Acesse o Design System](https://main--697ba3867e42ce1866dd5951.chromatic.com)**
+
+### Componentes Documentados
+
+- **Button** - Variantes: default, gradient, outline, ghost, destructive + tamanhos
+- **Card** - Superfícies com diferentes elevações
+- **Badge** - Status e categorias
+- **Input** - Campos de formulário com estados
+- **Progress** - Indicadores de progresso
+- **Typography** - Sistema de tipografia semântica
+
+### Executar Storybook Localmente
+
+```bash
+npm run storybook
+# Acesse http://localhost:6006
+```
+
+### Classes CSS Utilitárias
+
+O design system inclui classes CSS globais via `@apply`:
+
+| Categoria | Classes |
+|-----------|---------|
+| **Tipografia** | `.text-display`, `.text-heading-1`, `.text-body`, `.text-caption` |
+| **Formulários** | `.form-group`, `.form-label`, `.form-input`, `.form-error` |
+| **Layout** | `.section-container`, `.flex-center`, `.flex-between` |
+| **Superfícies** | `.surface-card`, `.surface-elevated`, `.surface-interactive` |
+| **Overlays** | `.overlay-backdrop`, `.overlay-content` |
+
 ---
 
 ## 🏗️ Estrutura do Projeto

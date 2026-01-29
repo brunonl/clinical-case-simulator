@@ -1,0 +1,35 @@
+# Chromatic - Storybook Visual Testing & Publishing
+# Este workflow publica o Design System no Chromatic a cada push na main
+
+name: "Chromatic"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  chromatic:
+    name: Publish to Chromatic
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish to Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true
+          autoAcceptChanges: true

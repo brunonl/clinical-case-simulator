@@ -242,7 +242,9 @@
    ============================================================================ */
 @layer utilities {
 
-  /* Tile Gradients - Refined & Smoother */
+  /* =========================================
+     TILE GRADIENTS - Refined & Smoother
+     ========================================= */
   .gradient-tile-a {
     background: linear-gradient(110deg, var(--color-tile-a-from) 0%, var(--color-tile-a-to) 100%);
   }
@@ -269,9 +271,188 @@
     backdrop-filter: blur(4px);
   }
 
-  /* Modern Glass/Surface Utility */
+  /* =========================================
+     TYPOGRAPHY - Semantic Text Classes
+     ========================================= */
+  .text-display {
+    @apply text-4xl font-black tracking-tighter text-foreground;
+  }
+
+  .text-heading-1 {
+    @apply text-2xl font-bold tracking-tight text-foreground;
+  }
+
+  .text-heading-2 {
+    @apply text-xl font-semibold tracking-tight text-foreground;
+  }
+
+  .text-heading-3 {
+    @apply text-lg font-semibold text-foreground;
+  }
+
+  .text-body {
+    @apply text-base text-muted-foreground leading-relaxed;
+  }
+
+  .text-body-sm {
+    @apply text-sm text-muted-foreground leading-relaxed;
+  }
+
+  .text-caption {
+    @apply text-xs text-muted-foreground uppercase tracking-widest font-medium;
+  }
+
+  .text-label {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  .text-mono {
+    @apply font-mono text-sm text-muted-foreground;
+  }
+
+  /* =========================================
+     FORM UTILITIES - Consistent Form Styling
+     ========================================= */
+  .form-group {
+    @apply flex flex-col gap-2;
+  }
+
+  .form-label {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  .form-input {
+    @apply flex h-10 w-full border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .form-textarea {
+    @apply flex min-h-[80px] w-full border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 resize-none;
+  }
+
+  .form-error {
+    @apply text-xs text-destructive font-medium;
+  }
+
+  .form-hint {
+    @apply text-xs text-muted-foreground;
+  }
+
+  /* =========================================
+     LAYOUT UTILITIES - Page & Section Wrappers
+     ========================================= */
+  .page-wrapper {
+    @apply min-h-screen bg-background;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .content-grid {
+    @apply grid gap-6;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-stack {
+    @apply flex flex-col gap-4;
+  }
+
+  /* =========================================
+     SURFACE UTILITIES - Elevation & Panels
+     ========================================= */
   .surface-card {
     background: var(--surface-2);
     border: 1px solid var(--border);
+  }
+
+  .surface-elevated {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  }
+
+  .surface-inset {
+    background: var(--surface-0);
+    border: 1px solid var(--border);
+  }
+
+  .surface-interactive {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+  }
+
+  .surface-interactive:hover {
+    background: var(--surface-3);
+    border-color: var(--ring);
+  }
+
+  /* =========================================
+     OVERLAY UTILITIES - Modals & Backdrops
+     ========================================= */
+  .overlay-backdrop {
+    @apply fixed inset-0 z-50 bg-black/80 backdrop-blur-sm;
+  }
+
+  .overlay-content {
+    @apply fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 bg-card border border-border shadow-2xl;
+  }
+
+  .overlay-panel {
+    @apply fixed inset-y-0 right-0 z-50 w-full max-w-md bg-card border-l border-border shadow-2xl;
+  }
+
+  /* =========================================
+     INTERACTIVE STATES - Common Patterns
+     ========================================= */
+  .clickable {
+    @apply cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.98];
+  }
+
+  .focusable {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  .disabled-state {
+    @apply opacity-50 pointer-events-none cursor-not-allowed;
+  }
+
+  /* =========================================
+     DECORATIVE UTILITIES - Visual Accents
+     ========================================= */
+  .divider {
+    @apply h-px w-full bg-border;
+  }
+
+  .divider-vertical {
+    @apply w-px h-full bg-border;
+  }
+
+  .accent-bar {
+    @apply h-1 w-full;
+    background: linear-gradient(110deg, var(--color-tile-a-from) 0%, var(--color-tile-a-to) 100%);
+  }
+
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-success {
+    @apply w-2 h-2 rounded-full bg-emerald-500;
+  }
+
+  .status-dot-warning {
+    @apply w-2 h-2 rounded-full bg-amber-500;
+  }
+
+  .status-dot-error {
+    @apply w-2 h-2 rounded-full bg-red-500;
   }
 }
