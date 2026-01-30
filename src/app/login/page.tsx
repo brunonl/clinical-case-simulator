@@ -42,17 +42,10 @@ export default function LoginPage() {
             await AuthService.signInWithPassword(data.email, data.password);
             router.push("/dashboard");
         } catch (error: any) {
+            console.error("Login failed:", error);
             setError("Email ou senha incorretos");
             setLoading(false);
         }
-
-        if (error) {
-            setError("Email ou senha incorretos");
-            setLoading(false);
-            return;
-        }
-
-        router.push("/dashboard");
     };
 
     const handleGoogleLogin = async () => {

@@ -6,7 +6,7 @@
 Este projeto é uma **aplicação Full-Stack moderna** desenvolvida para simular o atendimento clínico em um ambiente virtual controlado. O objetivo é permitir que estudantes de medicina e residentes pratiquem diagnóstico e tomada de decisão através de casos interativos.
 
 ![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-emerald?style=for-the-badge)
-![Cobertura de Testes](https://img.shields.io/badge/Testes-Jest_%2B_RTL-red?style=for-the-badge&logo=jest)
+![Cobertura de Testes](https://img.shields.io/badge/Testes-Jest_%2B_RTL-success?style=for-the-badge&logo=jest)
 
 ---
 
@@ -26,9 +26,14 @@ Este projeto não foi apenas "codificado", foi **arquitetado** para escalabilida
 *   **RLS (Row Level Security):** A segurança é aplicada **no banco de dados**, não apenas na API. Isso garante que um usuário só acesse seus próprios dados de desempenho, independente de onde venha a requisição.
 *   **Auth Seguro:** Fluxo de autenticação moderno (OAuth Google + Magic Links), eliminando a necessidade de gerenciamento complexo de senhas locais.
 
-### 🧪 Qualidade de Código (QA)
-*   **Jest + React Testing Library:** Suite de testes unitários configurada para garantir a integridade dos componentes críticos de UI e lógica.
-*   **ESLint + Prettier:** Padronização de código automatizada para garantir consistência entre commits.
+### 🧪 Testes e Qualidade
+A qualidade do código é uma prioridade neste projeto. A suíte de testes automatizados garante que as funcionalidades críticas funcionem corretamente e facilita a manutenção futura.
+
+*   **🛡️ Segurança para Mudar:** Testes cobrem o login e componentes principais, permitindo evoluir o código sem medo de quebrar o que já funciona.
+*   **📚 Código Documentado:** Os arquivos de teste explicam "o que" e "por que" cada funcionalidade existe, servindo como um manual prático para desenvolvedores.
+*   **✅ Ferramentas Modernas:** Utilizamos **Jest** e **React Testing Library** para simular exatamente como um usuário real interage com a aplicação (cliques, digitação), garantindo que a experiência final seja perfeita.
+
+> 👉 *Para entender como testamos, veja nosso [Manual de Testes (TESTING.md)](./TESTING.md).*
 
 ---
 
@@ -67,7 +72,7 @@ Este projeto não foi apenas "codificado", foi **arquitetado** para escalabilida
 5.  **Rodar Testes:**
     ```bash
     npm run test
-    # Executa a suite Jest
+    # Executa a suite Jest com output detalhado
     ```
 
 ---

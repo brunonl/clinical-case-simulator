@@ -31,6 +31,8 @@ export const Activity = IconMock;
 export const Loader2 = IconMock;
 export const ArrowLeft = IconMock;
 export const ArrowRight = IconMock;
+export const Copy = IconMock;
+export const CheckCircle2 = IconMock;
 
 // Fallback para qualquer outro named export
 export default IconMock;
