@@ -1,16 +1,5 @@
 
-import {
-    Home,
-    FileUser,
-    BarChart2,
-    Info,
-    HelpCircle,
-    BookOpen,
-    Target,
-    AlertCircle,
-    Keyboard,
-    CheckCircle
-} from "lucide-react";
+
 
 export const HELP_STEPS = [
     {
