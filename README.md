@@ -5,7 +5,8 @@
 
 Este projeto é uma **aplicação Full-Stack moderna** desenvolvida para simular o atendimento clínico em um ambiente virtual controlado. O objetivo é permitir que estudantes de medicina e residentes pratiquem diagnóstico e tomada de decisão através de casos interativos.
 
-![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-emerald?style=for-the-badge)
+🔗 **Acesse o projeto:** [clinical-case-simulator.vercel.app](https://clinical-case-simulator.vercel.app)
+
 ![Cobertura de Testes](https://img.shields.io/badge/Testes-Jest_%2B_RTL-success?style=for-the-badge&logo=jest)
 
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
@@ -13,6 +14,8 @@ Este projeto é uma **aplicação Full-Stack moderna** desenvolvida para simular
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Testing-Library](https://img.shields.io/badge/-TestingLibrary-%23E33332?style=for-the-badge&logo=testing-library&logoColor=white)
 
 ---
 
