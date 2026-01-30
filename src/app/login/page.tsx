@@ -70,7 +70,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex bg-[#050505] selection:bg-emerald-500/30 selection:text-emerald-200 overflow-hidden">
+        <div className="min-h-dvh flex bg-[#050505] selection:bg-emerald-500/30 selection:text-emerald-200 overflow-hidden">
             {/* Left Panel - Branding */}
             <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-[#0a0a0a] border-r border-white/5 flex-col justify-center">
                 {/* RESTORED: User Provided Grid Code */}
@@ -122,7 +122,7 @@ export default function LoginPage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505] pointer-events-none" />
 
                 {/* Added pt-4 to container to ensure space for floating pill */}
-                <div className="w-full max-w-[420px] animate-in slide-in-from-right-4 duration-700 fade-in relative z-10 pt-4">
+                <div className="w-full max-w-[420px] animate-in slide-in-from-right-4 duration-700 fade-in relative z-10">
 
                     {/* Mobile Logo Only (Horizontal match) */}
                     <div className="lg:hidden flex items-center gap-4 mb-6 group cursor-default justify-center mt-6">

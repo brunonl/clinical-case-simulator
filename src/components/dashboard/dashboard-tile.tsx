@@ -44,20 +44,20 @@ export function DashboardTile({
                     "motion-safe:transition-all motion-safe:duration-300"
                 )}
             >
-                {/* Barra escura inferior - Flexbox com Padding Reduzido */}
-                <div className="absolute bottom-0 left-0 right-0 py-2 sm:py-2.5 px-4 flex items-center justify-between tile-bar min-h-[32px] sm:min-h-[36px]">
+                {/* Barra escura inferior - Flexbox sem padding vertical */}
+                <div className="absolute bottom-0 left-0 right-0 px-4 flex items-center justify-between tile-bar h-[32px]">
                     {/* Texto ENTRAR/SAIR */}
-                    <span className="text-[11px] sm:text-xs text-white/90 uppercase tracking-[0.15em] font-medium leading-none">
+                    <span className="text-[10px] text-white/90 uppercase tracking-[0.15em] font-medium leading-none">
                         {buttonLabel}
                     </span>
 
                     {/* Indicador - Flat (quadrado) */}
                     <div className="w-5 h-5 sm:w-6 sm:h-6 border border-white/40 flex items-center justify-center bg-white/10 group-hover:bg-white/20 motion-safe:transition-colors motion-safe:duration-200">
-                        <span className="text-white/80 text-[10px] sm:text-xs leading-none mb-[1px]">→</span>
+                        <span className="text-white/80 text-[10px] leading-none mb-[1px]">→</span>
                     </div>
                 </div>
 
-                {/* Conteúdo central: Letra + Label - Reposicionado para não encavalar */}
+                {/* Conteúdo central: Letra + Label */}
                 <div
                     className="absolute inset-0 bottom-8 flex items-center justify-center p-4"
                     aria-hidden="true"
@@ -67,7 +67,7 @@ export function DashboardTile({
                         <span className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-thin block leading-none tracking-wide drop-shadow-md mb-2">
                             {letter}
                         </span>
-                        <span className="text-xs sm:text-xs md:text-sm font-medium block drop-shadow-md opacity-90 uppercase tracking-wider">
+                        <span className="text-xs sm:text-xs font-medium block drop-shadow-md opacity-90 uppercase tracking-wider">
                             {label}
                         </span>
                     </div>

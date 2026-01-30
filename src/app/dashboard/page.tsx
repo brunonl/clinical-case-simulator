@@ -69,7 +69,7 @@ export default function DashboardPage() {
                 {DASHBOARD_TILES.map((tile) => (
                     <DashboardTile
                         key={tile.href}
-                        className="flex-1 min-h-[14%]" // Garante que ocupem altura igual e tenham um mínimo sensato
+                        className="flex-1 min-h-[14%]"
                         href={tile.href}
                         letter={tile.letter}
                         label={tile.label}

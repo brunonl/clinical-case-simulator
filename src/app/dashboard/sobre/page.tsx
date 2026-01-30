@@ -3,7 +3,7 @@ import { ABOUT_CONTENT } from "@/constants/about-data";
 
 export default function SobrePage() {
     return (
-        <div className="space-y-4 p-3 md:p-4 animate-in fade-in duration-500">
+        <div className="space-y-4 animate-in fade-in duration-500">
             {/* Header */}
             <div className="flex items-center gap-3 mb-2">
                 <Info className="w-6 h-6 text-muted-foreground" />
@@ -53,15 +53,17 @@ export default function SobrePage() {
                 <div className="bg-card border border-border group overflow-hidden">
                     <div className="h-1 gradient-tile-a w-full" />
                     <div className="p-4">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 rounded-sm gradient-tile-a flex items-center justify-center">
+                        <div className="flex items-start gap-4">
+                            <div className="w-8 h-8 rounded-sm gradient-tile-a flex items-center justify-center flex-shrink-0">
                                 <Users className="w-4 h-4 text-white" />
                             </div>
-                            <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">{ABOUT_CONTENT.objectives[0].title}</h3>
+                            <div>
+                                <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-1">{ABOUT_CONTENT.objectives[0].title}</h3>
+                                <p className="text-muted-foreground text-xs leading-relaxed">
+                                    {ABOUT_CONTENT.objectives[0].text}
+                                </p>
+                            </div>
                         </div>
-                        <p className="text-muted-foreground text-xs leading-relaxed">
-                            {ABOUT_CONTENT.objectives[0].text}
-                        </p>
                     </div>
                 </div>
 
@@ -69,15 +71,17 @@ export default function SobrePage() {
                 <div className="bg-card border border-border group overflow-hidden">
                     <div className="h-1 gradient-tile-d w-full" />
                     <div className="p-4">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 rounded-sm gradient-tile-d flex items-center justify-center">
+                        <div className="flex items-start gap-4">
+                            <div className="w-8 h-8 rounded-sm gradient-tile-d flex items-center justify-center flex-shrink-0">
                                 <Sparkles className="w-4 h-4 text-white" />
                             </div>
-                            <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">{ABOUT_CONTENT.objectives[1].title}</h3>
+                            <div>
+                                <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-1">{ABOUT_CONTENT.objectives[1].title}</h3>
+                                <p className="text-muted-foreground text-xs leading-relaxed">
+                                    {ABOUT_CONTENT.objectives[1].text}
+                                </p>
+                            </div>
                         </div>
-                        <p className="text-muted-foreground text-xs leading-relaxed">
-                            {ABOUT_CONTENT.objectives[1].text}
-                        </p>
                     </div>
                 </div>
             </div>
