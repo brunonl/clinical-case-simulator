@@ -8,32 +8,46 @@ Este projeto é uma **aplicação Full-Stack moderna** desenvolvida para simular
 ![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-emerald?style=for-the-badge)
 ![Cobertura de Testes](https://img.shields.io/badge/Testes-Jest_%2B_RTL-success?style=for-the-badge&logo=jest)
 
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)
+
 ---
 
-## 🚀 Tecnologias e Decisões Arquiteturais
+## 📱 Credenciais para Recrutadores/Testes
 
-Este projeto não foi apenas "codificado", foi **arquitetado** para escalabilidade, performance e manutenibilidade. Abaixo, detalho as escolhas técnicas:
+Para facilitar a validação do projeto, utilize as credenciais de acesso admin abaixo:
 
-### ⚡ Frontend (Next.js 16 + React 19)
-*   **App Router:** Utilizamos a arquitetura mais recente do Next.js para aproveitar **Server Components** por padrão, reduzindo o bundle enviado ao cliente e melhorando o SEO/LCP.
-*   **Tailwind CSS v4:** Estilização utility-first para consistência visual e velocidade de desenvolvimento. Utiliza variáveis CSS nativas para um tema flexível.
-*   **Shadcn/UI:** Componentes acessíveis e customizáveis baseados no Radix UI. Foco em construir *sobre* primitivos sólidos em vez de reinventar a roda.
-*   **TypeScript Strict:** Tipagem estrita para evitar erros em tempo de execução e melhorar a DX (Developer Experience).
-*   **Mobile-First UX:** Design responsivo pensado primariamente para uso em dispositivos móveis (plantão/estágio), adaptando-se elegantemente para desktop.
+*   **Email de Teste:** `admin@scc.com`
+*   **Senha:** `admin123`
 
-### 🛡️ Backend & Segurança (Supabase)
-*   **BaaS (Backend as a Service):** Escolha estratégica para focar no produto. Supabase fornece Auth, Database e Storage com latência mínima.
-*   **RLS (Row Level Security):** A segurança é aplicada **no banco de dados**, não apenas na API. Isso garante que um usuário só acesse seus próprios dados de desempenho, independente de onde venha a requisição.
-*   **Auth Seguro:** Fluxo de autenticação moderno (OAuth Google + Magic Links), eliminando a necessidade de gerenciamento complexo de senhas locais.
+---
 
-### 🧪 Testes e Qualidade
-A qualidade do código é uma prioridade neste projeto. A suíte de testes automatizados garante que as funcionalidades críticas funcionem corretamente e facilita a manutenção futura.
+## 🏗️ Arquitetura e Tecnologias
 
-*   **🛡️ Segurança para Mudar:** Testes cobrem o login e componentes principais, permitindo evoluir o código sem medo de quebrar o que já funciona.
-*   **📚 Código Documentado:** Os arquivos de teste explicam "o que" e "por que" cada funcionalidade existe, servindo como um manual prático para desenvolvedores.
-*   **✅ Ferramentas Modernas:** Utilizamos **Jest** e **React Testing Library** para simular exatamente como um usuário real interage com a aplicação (cliques, digitação), garantindo que a experiência final seja perfeita.
+Este projeto foi desenhado para ser robusto como um sistema hospitalar, mas simples de usar como um app de celular.
 
-> 👉 *Para entender como testamos, veja nosso [Manual de Testes (TESTING.md)](./TESTING.md).*
+### ⚡ Frontend
+
+*   **Next.js 16 (App Router):** A estrutura principal. Usamos a versão mais moderna para garantir que o carregamento das páginas seja instantâneo.
+*   **Tailwind CSS + Shadcn:** Garante que o visual seja profissional, limpo e adaptável (funciona perfeitamente no celular e no computador).
+*   **TypeScript:** Nosso "corretor ortográfico" de código, que evita erros bobos e garante que o sistema não quebre na mão do usuário.
+
+### 🛡️ Backend & Segurança
+
+*   **Supabase (Banco de Dados):** O "cérebro" onde guardamos os casos clínicos e o progresso dos alunos com segurança máxima.
+*   **Segurança Inteligente (RLS):** Diferente de sistemas antigos, a segurança vive dentro do banco de dados. Isso significa que é matematicamente impossível um aluno ver as notas de outro, garantindo privacidade total.
+*   **Login Moderno:** Acesso via Google ou Link Mágico, eliminando a necessidade de decorar senhas complexas.
+
+### 🎨 Design System (Storybook)
+Adotamos o **Storybook** para desenvolver nossos componentes de forma isolada. Isso funciona como um "catálogo de peças LEGO": criamos botões, cards e formulários separadamente, garantindo que eles sejam bonitos e acessíveis antes mesmo de serem colocados nas páginas.
+
+### 🧪 Qualidade Garantida
+Criamos uma bateria de **testes automatizados (Jest)**. São "robôs" que verificam o sistema a cada alteração, garantindo que o login, os botões e os relatórios funcionem perfeitamente antes de qualquer atualização chegar aos usuários.
+
+> 👉 *Veja nosso [Manual de Testes](./TESTING.md) para detalhes técnicos.*
 
 ---
 
@@ -92,17 +106,4 @@ A qualidade do código é uma prioridade neste projeto. A suíte de testes autom
 
 ---
 
-## 📱 Credenciais para Recrutadores/Testes
 
-Para facilitar a validação do projeto, utilize as credenciais de acesso admin (se aplicável) ou o fluxo de Login Social.
-
-*   **Email de Teste:** admin@scc.com
-*   **Senha:** admin123
-
-> *Nota: O sistema prioriza Login Google, mas esta conta fallback existe para ambientes de revisão.*
-
----
-
-<div align="center">
-  <small>Desenvolvido com ❤️ e ☕ por Bruno Lima</small>
-</div>
