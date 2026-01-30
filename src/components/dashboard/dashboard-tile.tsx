@@ -45,15 +45,15 @@ export function DashboardTile({
                 )}
             >
                 {/* Barra escura inferior - Flexbox com Padding Reduzido */}
-                <div className="absolute bottom-0 left-0 right-0 py-1 sm:py-1.5 px-3 sm:px-4 flex items-center justify-between tile-bar min-h-[22px] sm:min-h-[26px]">
+                <div className="absolute bottom-0 left-0 right-0 py-2 sm:py-2.5 px-4 flex items-center justify-between tile-bar min-h-[32px] sm:min-h-[36px]">
                     {/* Texto ENTRAR/SAIR */}
-                    <span className="text-[9px] sm:text-[10px] text-white/90 uppercase tracking-[0.15em] font-medium leading-none">
+                    <span className="text-[11px] sm:text-xs text-white/90 uppercase tracking-[0.15em] font-medium leading-none">
                         {buttonLabel}
                     </span>
 
                     {/* Indicador - Flat (quadrado) */}
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 border border-white/40 flex items-center justify-center bg-white/10 group-hover:bg-white/20 motion-safe:transition-colors motion-safe:duration-200">
-                        <span className="text-white/80 text-[8px] sm:text-[10px] leading-none mb-[1px]">→</span>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 border border-white/40 flex items-center justify-center bg-white/10 group-hover:bg-white/20 motion-safe:transition-colors motion-safe:duration-200">
+                        <span className="text-white/80 text-[10px] sm:text-xs leading-none mb-[1px]">→</span>
                     </div>
                 </div>
 
@@ -63,11 +63,11 @@ export function DashboardTile({
                     aria-hidden="true"
                 >
                     <div className="text-center text-white select-none relative z-10">
-                        {/* Letras reduzidas para evitar encavalamento */}
-                        <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-thin block leading-none tracking-wide drop-shadow-md mb-1">
+                        {/* Letras aumentadas para mobile */}
+                        <span className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-thin block leading-none tracking-wide drop-shadow-md mb-2">
                             {letter}
                         </span>
-                        <span className="text-[9px] sm:text-[10px] md:text-xs font-medium block drop-shadow-md opacity-90">
+                        <span className="text-xs sm:text-xs md:text-sm font-medium block drop-shadow-md opacity-90 uppercase tracking-wider">
                             {label}
                         </span>
                     </div>

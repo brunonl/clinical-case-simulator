@@ -175,36 +175,64 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                             <p className="text-sm">Você ainda não realizou nenhum teste.</p>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="border-border hover:bg-transparent">
-                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground w-[40%]">Caso Clínico</TableHead>
-                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground hidden sm:table-cell">Disciplina</TableHead>
-                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground">Nota</TableHead>
-                                        <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground text-right">Data</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {attempts.map((attempt) => (
-                                        <TableRow key={attempt.id} className="border-border hover:bg-secondary/30 transition-colors">
-                                            <TableCell className="font-medium text-xs py-2">
-                                                {attempt.clinical_cases?.title || "Caso removido"}
-                                            </TableCell>
-                                            <TableCell className="text-xs text-muted-foreground py-2 hidden sm:table-cell">
-                                                {attempt.clinical_cases?.discipline || "-"}
-                                            </TableCell>
-                                            <TableCell className="py-2">
-                                                {getScoreBadge(attempt.score)}
-                                            </TableCell>
-                                            <TableCell className="text-xs text-muted-foreground text-right py-2">
-                                                {formatDate(attempt.completed_at)}
-                                            </TableCell>
+                        <>
+                            {/* View Desktop: Tabela */}
+                            <div className="hidden md:block overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="border-border hover:bg-transparent">
+                                            <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground w-[40%]">Caso Clínico</TableHead>
+                                            <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground">Disciplina</TableHead>
+                                            <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground">Nota</TableHead>
+                                            <TableHead className="py-2 h-9 text-[10px] uppercase font-bold text-muted-foreground text-right">Data</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {attempts.map((attempt) => (
+                                            <TableRow key={attempt.id} className="border-border hover:bg-secondary/30 transition-colors">
+                                                <TableCell className="font-medium text-xs py-2">
+                                                    {attempt.clinical_cases?.title || "Caso removido"}
+                                                </TableCell>
+                                                <TableCell className="text-xs text-muted-foreground py-2">
+                                                    {attempt.clinical_cases?.discipline || "-"}
+                                                </TableCell>
+                                                <TableCell className="py-2">
+                                                    {getScoreBadge(attempt.score)}
+                                                </TableCell>
+                                                <TableCell className="text-xs text-muted-foreground text-right py-2">
+                                                    {formatDate(attempt.completed_at)}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+
+                            {/* View Mobile: Cards */}
+                            <div className="md:hidden flex flex-col gap-3 p-3">
+                                {attempts.map((attempt) => (
+                                    <div key={attempt.id} className="bg-secondary/10 border border-border rounded-lg p-3 flex flex-col gap-3">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">
+                                                    {attempt.clinical_cases?.discipline || "Geral"}
+                                                </span>
+                                                <span className="font-medium text-sm text-foreground leading-tight">
+                                                    {attempt.clinical_cases?.title || "Caso removido"}
+                                                </span>
+                                            </div>
+                                            {getScoreBadge(attempt.score)}
+                                        </div>
+
+                                        <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                                            <span className="text-[10px] text-muted-foreground">
+                                                Data: <span className="text-foreground">{formatDate(attempt.completed_at)}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

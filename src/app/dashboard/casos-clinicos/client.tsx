@@ -142,7 +142,7 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                                     disabled={!selectedInstitution}
                                     variant="gradient"
                                     size="lg"
-                                    className="w-40"
+                                    className="w-full sm:w-40"
                                 >
                                     Próximo
                                 </Button>
@@ -178,29 +178,89 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                                     <p>Nenhum caso clínico encontrado para esta instituição.</p>
                                 </div>
                             ) : (
-                                <div className="overflow-x-auto">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="border-border hover:bg-transparent">
-                                                <TableHead className="text-muted-foreground w-24">Código</TableHead>
-                                                <TableHead className="text-muted-foreground">Disciplina</TableHead>
-                                                <TableHead className="text-muted-foreground">Dificuldade</TableHead>
-                                                <TableHead className="text-muted-foreground">Título</TableHead>
-                                                <TableHead className="text-muted-foreground text-right">Ação</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {filteredCases.map((c) => (
-                                                <TableRow
+                                <>
+                                    {/* Desktop View: Tabela */}
+                                    <div className="hidden md:block overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="border-border hover:bg-transparent">
+                                                    <TableHead className="text-muted-foreground w-24">Código</TableHead>
+                                                    <TableHead className="text-muted-foreground">Disciplina</TableHead>
+                                                    <TableHead className="text-muted-foreground">Dificuldade</TableHead>
+                                                    <TableHead className="text-muted-foreground">Título</TableHead>
+                                                    <TableHead className="text-muted-foreground text-right">Ação</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {filteredCases.map((c) => (
+                                                    <TableRow
+                                                        key={c.id}
+                                                        className={`border-border transition-colors ${selectedCase?.id === c.id ? "bg-[var(--color-tile-b-from)]/20" : "hover:bg-secondary/30"}`}
+                                                    >
+                                                        <TableCell className="text-foreground font-mono text-xs">{c.code}</TableCell>
+                                                        <TableCell className="text-muted-foreground">{c.discipline}</TableCell>
+                                                        <TableCell>
+                                                            <Badge
+                                                                variant="outline"
+                                                                className={`capitalize ${c.difficulty === "fácil"
+                                                                    ? "bg-teal-500/10 text-teal-400 border-teal-500/30"
+                                                                    : c.difficulty === "médio"
+                                                                        ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
+                                                                        : "bg-red-500/10 text-red-400 border-red-500/30"
+                                                                    }`}
+                                                            >
+                                                                {c.difficulty || "N/A"}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-foreground font-medium">{c.title}</TableCell>
+                                                        <TableCell className="text-right">
+                                                            <Button
+                                                                variant={selectedCase?.id === c.id ? "gradient" : "outline"}
+                                                                onClick={() => setSelectedCase(c)}
+                                                                size="lg"
+                                                                className="w-36"
+                                                            >
+                                                                {selectedCase?.id === c.id ? "Selecionado" : "Selecionar"}
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+
+                                    {/* Mobile View: Cards */}
+                                    <div className="md:hidden flex flex-col gap-4">
+                                        {filteredCases.map((c) => {
+                                            const isSelected = selectedCase?.id === c.id;
+                                            return (
+                                                <div
                                                     key={c.id}
-                                                    className={`border-border transition-colors ${selectedCase?.id === c.id ? "bg-[var(--color-tile-b-from)]/20" : "hover:bg-secondary/30"}`}
+                                                    onClick={() => setSelectedCase(c)}
+                                                    className={`
+                                                        relative border rounded-xl p-4 transition-all duration-200 cursor-pointer
+                                                        ${isSelected
+                                                            ? "bg-[var(--color-tile-b-from)]/10 border-[var(--color-tile-b-from)] shadow-[0_0_15px_rgba(var(--color-tile-b-from-rgb),0.1)]"
+                                                            : "bg-secondary/10 border-border hover:bg-secondary/20"
+                                                        }
+                                                    `}
                                                 >
-                                                    <TableCell className="text-foreground font-mono text-xs">{c.code}</TableCell>
-                                                    <TableCell className="text-muted-foreground">{c.discipline}</TableCell>
-                                                    <TableCell>
+                                                    {/* Header do Card */}
+                                                    <div className="flex justify-between items-start mb-3">
+                                                        <div className="flex flex-col gap-1">
+                                                            <Badge
+                                                                variant="outline"
+                                                                className="w-fit bg-secondary/50 text-[10px] font-mono border-border text-muted-foreground"
+                                                            >
+                                                                {c.code}
+                                                            </Badge>
+                                                            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground opacity-80">
+                                                                {c.discipline}
+                                                            </span>
+                                                        </div>
                                                         <Badge
                                                             variant="outline"
-                                                            className={`capitalize ${c.difficulty === "fácil"
+                                                            className={`capitalize text-[10px] px-2 py-0.5 ${c.difficulty === "fácil"
                                                                 ? "bg-teal-500/10 text-teal-400 border-teal-500/30"
                                                                 : c.difficulty === "médio"
                                                                     ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
@@ -209,27 +269,32 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                                                         >
                                                             {c.difficulty || "N/A"}
                                                         </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="text-foreground font-medium">{c.title}</TableCell>
-                                                    <TableCell className="text-right">
-                                                        <Button
-                                                            variant={selectedCase?.id === c.id ? "gradient" : "outline"}
-                                                            onClick={() => setSelectedCase(c)}
-                                                            size="lg"
-                                                            className="w-36"
-                                                        >
-                                                            {selectedCase?.id === c.id ? "Selecionado" : "Selecionar"}
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
+                                                    </div>
+
+                                                    {/* Título e Conteúdo */}
+                                                    <h3 className={`text-base font-medium leading-tight mb-4 ${isSelected ? "text-white" : "text-foreground"}`}>
+                                                        {c.title}
+                                                    </h3>
+
+                                                    {/* Botão de Ação (Visual apenas, pois o card todo é clicável) */}
+                                                    <div className={`
+                                                        w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-colors
+                                                        ${isSelected
+                                                            ? "bg-[var(--color-tile-b-from)] text-white"
+                                                            : "bg-secondary border border-border text-foreground group-hover:bg-secondary/80"
+                                                        }
+                                                    `}>
+                                                        {isSelected ? "Caso Selecionado" : "Selecionar Caso"}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </>
                             )}
 
-                            <div className="flex justify-between pt-4">
-                                <Button variant="ghost" onClick={handleBack} size="lg" className="w-40 bg-secondary text-foreground hover:bg-secondary/80">
+                            <div className="flex flex-col-reverse sm:flex-row justify-between pt-4 gap-3 sm:gap-0">
+                                <Button variant="ghost" onClick={handleBack} size="lg" className="w-full sm:w-40 bg-secondary text-foreground hover:bg-secondary/80">
                                     Voltar
                                 </Button>
                                 <Button
@@ -237,7 +302,7 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                                     disabled={!selectedCase}
                                     variant="gradient"
                                     size="lg"
-                                    className="w-40"
+                                    className="w-full sm:w-40"
                                 >
                                     Próximo
                                 </Button>
@@ -354,15 +419,15 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                             </TabsContent>
                         </Tabs>
 
-                        <div className="flex justify-between pt-6 border-t border-border mt-6">
-                            <Button variant="ghost" onClick={handleBack} size="lg" className="w-40 bg-secondary text-foreground hover:bg-secondary/80">
+                        <div className="flex flex-col-reverse sm:flex-row justify-between pt-6 border-t border-border mt-6 gap-3 sm:gap-0">
+                            <Button variant="ghost" onClick={handleBack} size="lg" className="w-full sm:w-40 bg-secondary text-foreground hover:bg-secondary/80">
                                 Voltar
                             </Button>
                             <Button
                                 onClick={handleNext}
                                 variant="gradient"
                                 size="lg"
-                                className="w-40"
+                                className="w-full sm:w-40"
                             >
                                 Próximo
                             </Button>
@@ -381,14 +446,14 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                         </div>
                         <h2 className="text-2xl font-semibold text-foreground">Desafio</h2>
                         <p className="text-muted-foreground">Pronto para iniciar o desafio?</p>
-                        <div className="flex justify-center gap-4">
-                            <Button variant="ghost" onClick={handleBack} size="lg" className="w-40 bg-secondary text-foreground hover:bg-secondary/80">
+                        <div className="flex flex-col-reverse sm:flex-row justify-center gap-4">
+                            <Button variant="ghost" onClick={handleBack} size="lg" className="w-full sm:w-40 bg-secondary text-foreground hover:bg-secondary/80">
                                 Voltar
                             </Button>
                             <Button
                                 variant="gradient"
                                 size="lg"
-                                className="w-40"
+                                className="w-full sm:w-40"
                                 onClick={() => setShowConfirmDialog(true)}
                             >
                                 Pronto
@@ -414,11 +479,11 @@ export function CasosClinicosClient({ institutions, cases }: CasosClinicosClient
                             <p>Já estudou todo o caso clínico? Então clique no botão Iniciar e boa sorte!</p>
                         </DialogDescription>
                     </DialogHeader>
-                    <DialogFooter className="gap-2">
-                        <Button variant="ghost" onClick={() => setShowConfirmDialog(false)} size="lg" className="w-40 bg-secondary text-foreground hover:bg-secondary/80">
+                    <DialogFooter className="flex-col-reverse sm:flex-row gap-2">
+                        <Button variant="ghost" onClick={() => setShowConfirmDialog(false)} size="lg" className="w-full sm:w-40 bg-secondary text-foreground hover:bg-secondary/80">
                             Voltar
                         </Button>
-                        <Button onClick={handleStartQuiz} variant="gradient" size="lg" className="w-40">
+                        <Button onClick={handleStartQuiz} variant="gradient" size="lg" className="w-full sm:w-40">
                             Iniciar
                         </Button>
                     </DialogFooter>

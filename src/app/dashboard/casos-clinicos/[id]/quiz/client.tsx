@@ -114,123 +114,184 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
         const isPassing = score >= 70;
 
         return (
-            <div className="max-w-2xl mx-auto animate-in fade-in duration-500">
-                <Card className="surface-card border-border shadow-2xl">
-                    <CardHeader className="text-center border-b border-border/50 py-6">
-                        <div className="flex justify-center mb-4">
-                            <div className={cn(
-                                "w-10 h-10 rounded-none flex items-center justify-center border-2",
-                                isPassing
-                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-500"
-                                    : "bg-red-500/10 border-red-500 text-red-500"
-                            )}>
-                                <Trophy className="w-5 h-5" />
-                            </div>
-                        </div>
-                        <CardTitle className="text-lg font-bold tracking-tight">
-                            {isPassing ? "Excelente desempenho!" : "Bom esforço!"}
-                        </CardTitle>
-                        <p className="text-muted-foreground mt-1 text-sm">
-                            {isPassing
-                                ? "Você demonstrou domínio sobre este caso clinico."
-                                : "Revise os conceitos e tente novamente para melhorar."}
-                        </p>
-                    </CardHeader>
-                    <CardContent className="space-y-6 pt-4">
-                        <div className="text-center">
-                            <div className={cn(
-                                "text-3xl font-black mb-1 tracking-tighter",
-                                isPassing ? "text-emerald-500" : "text-amber-500"
-                            )}>
-                                {score.toFixed(0)}%
-                            </div>
-                            <p className="text-muted-foreground uppercase tracking-widest text-[10px] font-semibold">Nota Final</p>
+            <div className="max-w-xl mx-auto animate-in fade-in zoom-in-95 duration-700 py-4 md:py-8">
+                {/* Header do Resultado */}
+                <div className="text-center mb-8 relative">
+                    <div className={cn(
+                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 blur-3xl opacity-20 rounded-full",
+                        isPassing ? "bg-emerald-500" : "bg-red-500"
+                    )} />
+
+                    <div className="relative z-10">
+                        <div className={cn(
+                            "inline-flex items-center justify-center p-3 rounded-2xl mb-4 shadow-lg ring-1 ring-inset backdrop-blur-sm",
+                            isPassing
+                                ? "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20"
+                                : "bg-red-500/10 text-red-400 ring-red-500/20"
+                        )}>
+                            <Trophy className="w-8 h-8" strokeWidth={1.5} />
                         </div>
 
+                        <h2 className="text-3xl font-bold tracking-tight text-white mb-2">
+                            {isPassing ? "Aprovado!" : "Não foi dessa vez"}
+                        </h2>
+                        <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+                            {isPassing
+                                ? "Excelente! Você demonstrou domínio dos conceitos clínicos."
+                                : "Revise os pontos de atenção abaixo e tente novamente."}
+                        </p>
+                    </div>
+                </div>
+
+                <Card className="surface-card border-border shadow-2xl overflow-hidden relative">
+                    {/* Barra de Status Superior */}
+                    <div className={cn(
+                        "h-1.5 w-full absolute top-0 left-0",
+                        isPassing ? "gradient-tile-a" : "bg-red-500"
+                    )} />
+
+                    <CardContent className="space-y-8 pt-8 px-6 md:px-8">
+                        {/* Círculo de Nota Principal */}
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="relative mb-2">
+                                <svg className="w-40 h-40 rotate-[-90deg]">
+                                    <circle
+                                        cx="80"
+                                        cy="80"
+                                        r="70"
+                                        stroke="currentColor"
+                                        strokeWidth="8"
+                                        fill="transparent"
+                                        className="text-secondary opacity-20"
+                                    />
+                                    <circle
+                                        cx="80"
+                                        cy="80"
+                                        r="70"
+                                        stroke="currentColor"
+                                        strokeWidth="8"
+                                        fill="transparent"
+                                        strokeDasharray={440}
+                                        strokeDashoffset={440 - (440 * score) / 100}
+                                        className={cn(
+                                            "transition-all duration-1000 ease-out",
+                                            isPassing ? "text-emerald-500" : "text-amber-500"
+                                        )}
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span className={cn(
+                                        "text-4xl font-black tracking-tighter",
+                                        isPassing ? "text-emerald-500" : "text-amber-500"
+                                    )}>
+                                        {score.toFixed(0)}%
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mt-1">
+                                        Nota Final
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Grid de Estatísticas */}
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 text-center">
+                            <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-xl p-4 text-center">
                                 <div className="flex items-center justify-center gap-2 text-emerald-500 mb-1">
                                     <CheckCircle className="w-5 h-5" />
                                     <span className="text-2xl font-bold">{correctCount}</span>
                                 </div>
-                                <p className="text-[10px] text-emerald-400 font-medium uppercase">Acertos</p>
+                                <p className="text-[10px] text-emerald-400/70 font-bold uppercase tracking-wider">Acertos</p>
                             </div>
-                            <div className="bg-red-500/10 border border-red-500/20 p-4 text-center">
+                            <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-4 text-center">
                                 <div className="flex items-center justify-center gap-2 text-red-500 mb-1">
                                     <XCircle className="w-5 h-5" />
                                     <span className="text-2xl font-bold">{incorrectCount}</span>
                                 </div>
-                                <p className="text-[10px] text-red-400 font-medium uppercase">Erros</p>
+                                <p className="text-[10px] text-red-400/70 font-bold uppercase tracking-wider">Erros</p>
                             </div>
                         </div>
 
-                        {/* Review Section */}
-                        <div className="space-y-3 pt-2">
-                            <h3 className="font-semibold text-base flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4 text-muted-foreground" />
-                                Revisão Detalhada
-                            </h3>
-                            <div className="space-y-3">
-                                {questions.map((q, index) => {
-                                    const userAnswer = answers[q.id];
-                                    const isCorrect = userAnswer === q.correct;
-
-                                    return (
-                                        <div key={q.id} className={cn(
-                                            "p-3 border-l-2 transition-all hover:bg-white/5",
-                                            isCorrect
-                                                ? "border-l-emerald-500 bg-emerald-500/5"
-                                                : "border-l-red-500 bg-red-500/5"
-                                        )}>
-                                            <div className="flex items-start gap-3">
-                                                <div className="mt-0.5 flex-shrink-0">
-                                                    <span className="text-[10px] font-mono opacity-50">#{index + 1}</span>
-                                                </div>
-                                                <div className="flex-1 space-y-1.5">
-                                                    <p className="font-medium text-xs leading-relaxed">
-                                                        {q.question}
-                                                    </p>
-
-                                                    <div className="grid gap-1 text-[10px]">
-                                                        <div className="flex flex-col gap-0.5">
-                                                            <span className="text-muted-foreground uppercase opacity-70">Sua Resposta</span>
-                                                            <span className={cn(
-                                                                "font-medium flex items-center gap-1.5",
-                                                                isCorrect ? "text-emerald-400" : "text-red-400"
-                                                            )}>
-                                                                {isCorrect ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                                                                {q.options[userAnswer]}
-                                                            </span>
-                                                        </div>
-
-                                                        {!isCorrect && (
-                                                            <div className="flex flex-col gap-0.5 mt-1">
-                                                                <span className="text-muted-foreground uppercase opacity-70">Correta</span>
-                                                                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
-                                                                    <CheckCircle className="w-3 h-3" />
-                                                                    {q.options[q.correct]}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center gap-3 pt-4 border-t border-border">
-                            <Button variant="outline" onClick={() => router.push("/dashboard/desempenho")} className="w-32 h-9 text-xs border-border hover:bg-secondary">
-                                Ver Dashboard
+                        {/* Botões de Ação */}
+                        <div className="flex flex-col-reverse sm:flex-row justify-center gap-3 pt-6 border-t border-border">
+                            <Button variant="ghost" onClick={() => router.push("/dashboard/desempenho")} className="w-full sm:w-auto h-11 text-xs font-semibold text-muted-foreground hover:bg-secondary border border-transparent hover:border-border">
+                                VER MEU DESEMPENHO
                             </Button>
-                            <Button onClick={() => router.push("/dashboard/casos-clinicos")} className="w-32 h-9 text-xs gradient-tile-a hover:brightness-110 text-white border-0">
-                                Novo Caso
+                            <Button
+                                onClick={() => router.push("/dashboard/casos-clinicos")}
+                                className={cn(
+                                    "w-full sm:w-auto h-11 px-8 text-xs font-bold text-white shadow-lg transition-all hover:scale-[1.02]",
+                                    "gradient-tile-a hover:brightness-110 border-0"
+                                )}
+                            >
+                                PRÓXIMO CASO
+                                <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* Seção de Revisão (Expansível ou Lista) */}
+                <div className="mt-8 space-y-4">
+                    <h3 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider px-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Revisão Questão a Questão
+                    </h3>
+
+                    <div className="space-y-3">
+                        {questions.map((q, index) => {
+                            const userAnswer = answers[q.id];
+                            const isCorrect = userAnswer === q.correct;
+
+                            return (
+                                <div key={q.id} className={cn(
+                                    "rounded-lg border p-4 transition-all duration-300",
+                                    isCorrect
+                                        ? "bg-secondary/20 border-border hover:border-emerald-500/30"
+                                        : "bg-red-500/5 border-red-500/20"
+                                )}>
+                                    <div className="flex items-start gap-4">
+                                        <div className={cn(
+                                            "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5",
+                                            isCorrect ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"
+                                        )}>
+                                            {index + 1}
+                                        </div>
+
+                                        <div className="flex-1 space-y-2">
+                                            <p className="text-sm font-medium text-foreground leading-relaxed">
+                                                {q.question}
+                                            </p>
+
+                                            <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-white/5">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">Sua Resposta:</span>
+                                                    <span className={cn(
+                                                        "text-xs font-medium flex items-center gap-2",
+                                                        isCorrect ? "text-emerald-400" : "text-red-400"
+                                                    )}>
+                                                        {isCorrect ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                                        {q.options[userAnswer]}
+                                                    </span>
+                                                </div>
+
+                                                {!isCorrect && (
+                                                    <div className="flex flex-col gap-1 bg-emerald-500/5 p-2 rounded border border-emerald-500/10">
+                                                        <span className="text-[9px] text-emerald-500/70 uppercase tracking-wider font-semibold">Resposta Correta:</span>
+                                                        <span className="text-xs font-medium text-emerald-400 flex items-center gap-2">
+                                                            <CheckCircle className="w-3 h-3" />
+                                                            {q.options[q.correct]}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         );
     }
