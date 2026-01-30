@@ -7,7 +7,6 @@ Este projeto é uma **aplicação Full-Stack moderna** desenvolvida para simular
 
 🔗 **Acesse o projeto:** [clinical-case-simulator.vercel.app](https://clinical-case-simulator.vercel.app)
 
-![Cobertura de Testes](https://img.shields.io/badge/Testes-Jest_%2B_RTL-success?style=for-the-badge&logo=jest)
 
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
