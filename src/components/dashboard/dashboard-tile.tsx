@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { KeyboardKey } from "@/components/ui/keyboard-key";
 
 interface DashboardTileProps {
     href: string;
@@ -86,9 +87,7 @@ export function DashboardTile({
 
                 {/* Indicador de tecla de atalho */}
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
-                    <kbd className="text-[8px] sm:text-[10px] text-white/50 font-mono bg-black/20 px-1.5 py-0.5">
-                        {letter}
-                    </kbd>
+                    <KeyboardKey size="sm" variant="compact">{letter}</KeyboardKey>
                 </div>
             </div>
         </Link>

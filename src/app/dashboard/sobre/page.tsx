@@ -1,89 +1,42 @@
-import { Info, Lightbulb, BookOpen, Users, Sparkles, Building2 } from "lucide-react";
-import { ABOUT_CONTENT } from "@/constants/about-data";
+import { Info, Lightbulb, BookOpen, Users, Sparkles } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
+import { InfoCard } from "@/components/ui/info-card";
 
 export default function SobrePage() {
     return (
         <div className="space-y-4 animate-in fade-in duration-500">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-2">
-                <Info className="w-6 h-6 text-muted-foreground" />
-                <h1 className="text-xl font-semibold text-foreground">Sobre o Simulador</h1>
-            </div>
+            <PageHeader icon={Info} title="Sobre o Simulador" />
 
-            {/* Main Content Grid - Responsive */}
             <div className="space-y-4">
+                <InfoCard
+                    icon={Lightbulb}
+                    title="O que é?"
+                    description="O Simulador de Casos Clínicos é uma ferramenta de apoio ao ensino médico, que tem como objetivo disponibilizar um ambiente virtual para Simulação de Casos Clínicos reais, de complexidade e nível de atenção variáveis."
+                    gradientClass="gradient-tile-c"
+                />
 
-                {/* Description Card */}
-                <div className="bg-card border border-border group overflow-hidden">
-                    <div className="h-1 gradient-tile-c w-full" />
-                    <div className="p-4">
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-sm gradient-tile-c flex items-center justify-center flex-shrink-0">
-                                <Lightbulb className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                                <h2 className="text-base font-bold text-foreground mb-1 uppercase tracking-wide">{ABOUT_CONTENT.description.title}</h2>
-                                <p className="text-muted-foreground text-sm leading-relaxed">
-                                    {ABOUT_CONTENT.description.text}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <InfoCard
+                    icon={BookOpen}
+                    title="Metodologia"
+                    description="A plataforma utiliza uma abordagem baseada em casos para desenvolver o raciocínio clínico dos estudantes. Cada caso apresenta uma situação real, com história clínica completa, exames físicos, laboratoriais e de imagem, permitindo que o aluno desenvolva habilidades diagnósticas de forma progressiva."
+                    gradientClass="gradient-tile-b"
+                />
 
-                {/* Methodology Card */}
-                <div className="bg-card border border-border group overflow-hidden">
-                    <div className="h-1 gradient-tile-b w-full" />
-                    <div className="p-4">
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-sm gradient-tile-b flex items-center justify-center flex-shrink-0">
-                                <BookOpen className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                                <h2 className="text-base font-bold text-foreground mb-1 uppercase tracking-wide">{ABOUT_CONTENT.methodology.title}</h2>
-                                <p className="text-muted-foreground text-sm leading-relaxed">
-                                    {ABOUT_CONTENT.methodology.text}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <InfoCard
+                    icon={Users}
+                    title="Para Estudantes"
+                    description="Praticar o raciocínio clínico em um ambiente seguro, sem riscos ao paciente. Desenvolver habilidades de anamnese, exame físico e diagnóstico diferencial."
+                    gradientClass="gradient-tile-a"
+                    size="sm"
+                />
 
-                {/* Objective 1 */}
-                <div className="bg-card border border-border group overflow-hidden">
-                    <div className="h-1 gradient-tile-a w-full" />
-                    <div className="p-4">
-                        <div className="flex items-start gap-4">
-                            <div className="w-8 h-8 rounded-sm gradient-tile-a flex items-center justify-center flex-shrink-0">
-                                <Users className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-1">{ABOUT_CONTENT.objectives[0].title}</h3>
-                                <p className="text-muted-foreground text-xs leading-relaxed">
-                                    {ABOUT_CONTENT.objectives[0].text}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Objective 2 */}
-                <div className="bg-card border border-border group overflow-hidden">
-                    <div className="h-1 gradient-tile-d w-full" />
-                    <div className="p-4">
-                        <div className="flex items-start gap-4">
-                            <div className="w-8 h-8 rounded-sm gradient-tile-d flex items-center justify-center flex-shrink-0">
-                                <Sparkles className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-foreground uppercase tracking-wide mb-1">{ABOUT_CONTENT.objectives[1].title}</h3>
-                                <p className="text-muted-foreground text-xs leading-relaxed">
-                                    {ABOUT_CONTENT.objectives[1].text}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <InfoCard
+                    icon={Sparkles}
+                    title="Para Professores"
+                    description="Acompanhar o desempenho dos alunos, identificar dificuldades comuns e personalizar o ensino com base em dados objetivos de avaliação."
+                    gradientClass="gradient-tile-d"
+                    size="sm"
+                />
             </div>
         </div>
     );

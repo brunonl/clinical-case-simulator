@@ -64,7 +64,7 @@ export const AuthService = {
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error) {
             console.error("AuthService: Get user error:", error);
-            return null;
+            throw error;
         }
         return user;
     }

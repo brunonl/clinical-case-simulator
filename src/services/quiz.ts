@@ -20,17 +20,6 @@ export const QuizService = {
 
         if (error) {
             console.error("Error saving attempt:", error);
-            // Fallback for older schema migration compatibility if needed
-            if (error.message.includes('column "case_id" of relation "quiz_attempts" does not exist')) {
-                const { error: fallbackError } = await supabase.from("quiz_attempts").insert({
-                    user_id: userId,
-                    clinical_case_id: caseId, // Fallback key
-                    answers: answers,
-                    score: score,
-                });
-                if (fallbackError) throw new Error(fallbackError.message);
-                return;
-            }
             throw new Error(error.message);
         }
     },

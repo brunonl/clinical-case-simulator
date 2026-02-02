@@ -1,28 +1,16 @@
-import { createClient } from "@/lib/supabase/server";
+import { InstitutionService } from "@/services/institution.service";
+import { ClinicalCaseService } from "@/services/clinical-case.service";
 import { CasosClinicosClient } from "./client";
 
 export default async function CasosClinicosPage() {
-    const supabase = await createClient();
-
-    // Fetch institutions
-    const { data: institutions } = await supabase
-        .from("institutions")
-        .select("*")
-        .order("name");
-
-    // Fetch clinical cases with institution name
-    const { data: cases } = await supabase
-        .from("clinical_cases")
-        .select(`
-      *,
-      institutions (name)
-    `)
-        .order("code");
+    // Usa services ao invés de acessar o banco diretamente
+    const institutions = await InstitutionService.getAll();
+    const cases = await ClinicalCaseService.getAllWithInstitution();
 
     return (
         <CasosClinicosClient
-            institutions={institutions || []}
-            cases={cases || []}
+            institutions={institutions}
+            cases={cases}
         />
     );
 }

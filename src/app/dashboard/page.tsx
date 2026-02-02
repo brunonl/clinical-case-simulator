@@ -6,13 +6,12 @@ import { LayoutGrid } from "lucide-react";
 import { DASHBOARD_TILES, KEY_MAP } from "@/constants/dashboard-data";
 import { DashboardTile } from "@/components/dashboard/dashboard-tile";
 import { AuthService } from "@/services/auth";
+import { KeyboardKey } from "@/components/ui/keyboard-key";
 
 export default function DashboardPage() {
     const router = useRouter();
 
-    // =========================================
-    // KEYBOARD NAVIGATION
-    // =========================================
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -37,10 +36,10 @@ export default function DashboardPage() {
             role="menu"
             aria-label="Menu principal do dashboard"
         >
-            {/* Header com estilo padronizado (text-xl font-semibold) */}
+
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-3">
-                    {/* Opcional: Ícone para combinar com as outras páginas */}
+
                     <LayoutGrid className="w-6 h-6 text-muted-foreground hidden sm:block" />
                     <h1 className="text-xl font-semibold text-foreground tracking-tight">
                         Visão Geral
@@ -52,9 +51,7 @@ export default function DashboardPage() {
                         <span className="opacity-60 text-[10px] uppercase tracking-wider hidden sm:inline">Teclas:</span>
                         <div className="flex gap-1">
                             {["A", "B", "C", "D"].map((k) => (
-                                <kbd key={k} className="bg-secondary px-1.5 py-0.5 rounded border border-border font-mono font-bold text-[10px] uppercase shadow-sm min-w-[20px] text-center">
-                                    {k}
-                                </kbd>
+                                <KeyboardKey key={k} size="sm" variant="secondary">{k}</KeyboardKey>
                             ))}
                         </div>
                     </div>
@@ -64,7 +61,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {/* Navigation Stack (A-D) - Maximized Vertical Space */}
+
             <div className="flex flex-col flex-1 gap-3 overflow-hidden">
                 {DASHBOARD_TILES.map((tile) => (
                     <DashboardTile

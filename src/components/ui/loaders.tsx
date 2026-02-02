@@ -2,10 +2,9 @@
 
 interface FullScreenLoaderProps {
     text?: string;
-    className?: string;
 }
 
-export function FullScreenLoader({ text = "Carregando...", className }: FullScreenLoaderProps) {
+export function FullScreenLoader({ text = "Carregando..." }: FullScreenLoaderProps) {
     return (
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="relative flex flex-col items-center gap-8">

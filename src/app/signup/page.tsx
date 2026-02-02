@@ -53,8 +53,9 @@ export default function SignupPage() {
             setTimeout(() => {
                 router.push("/login");
             }, 2000);
-        } catch (error: any) {
-            setError(error.message);
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : "Erro ao criar conta";
+            setError(errorMessage);
             setLoading(false);
         }
 

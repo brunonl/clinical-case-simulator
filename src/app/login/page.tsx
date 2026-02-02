@@ -41,8 +41,8 @@ export default function LoginPage() {
         try {
             await AuthService.signInWithPassword(data.email, data.password);
             router.push("/dashboard");
-        } catch (error: any) {
-            console.error("Login failed:", error);
+        } catch (err: unknown) {
+            console.error("Login failed:", err);
             setError("Email ou senha incorretos");
             setLoading(false);
         }
@@ -52,7 +52,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             await AuthService.signInWithOAuth("google");
-        } catch (error: any) {
+        } catch {
             setError("Erro ao fazer login com Google");
             setLoading(false);
         }

@@ -9,6 +9,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
 import { BarChart2, TrendingUp, Trophy, Target, Activity, Zap } from "lucide-react";
 import type { QuizAttempt } from "@/lib/supabase/types";
 import {
@@ -26,7 +28,7 @@ interface DesempenhoClientProps {
     attempts: (QuizAttempt & { clinical_cases: { title: string; discipline: string } | null })[];
 }
 
-// Helper functions
+
 const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "-";
     return new Date(dateStr).toLocaleDateString("pt-BR", {
@@ -46,7 +48,7 @@ const getScoreBadge = (score: number | null) => {
 };
 
 export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
-    // Calculate stats
+
     const totalAttempts = attempts.length;
     const averageScore = totalAttempts > 0
         ? attempts.reduce((acc, a) => acc + (a.score || 0), 0) / totalAttempts
@@ -58,7 +60,7 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
         ? (attempts.filter((a) => (a.score || 0) >= 70).length / totalAttempts) * 100
         : 0;
 
-    // Stats cards config
+
     const statsCards = [
         { title: "Total de Testes", value: totalAttempts, icon: BarChart2, gradient: "gradient-tile-a" },
         { title: "Média Geral", value: `${averageScore.toFixed(1)}%`, icon: TrendingUp, gradient: "gradient-tile-b" },
@@ -67,41 +69,23 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
     ];
 
     return (
-        <div className="space-y-4 p-3 md:p-4">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-4">
-                <Activity className="w-6 h-6 text-[var(--color-tile-a-from)]" />
-                <h1 className="text-xl font-semibold text-foreground">Desempenho</h1>
-            </div>
+        <div className="space-y-4 p-3 md:p-4 animate-in fade-in duration-500">
+            <PageHeader title="Desempenho" icon={Activity} iconClassName="text-[var(--color-tile-a-from)]" />
 
-            {/* Stats Cards - Dark with gradient accent - COMPACT */}
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {statsCards.map((stat, index) => (
-                    <div
+                    <StatCard
                         key={index}
-                        className="relative overflow-hidden bg-card border border-border group hover:border-[var(--color-tile-a-from)]/30 transition-colors"
-                    >
-                        {/* Gradient accent bar */}
-                        <div className={`h-1 ${stat.gradient}`} />
-
-                        <div className="p-4">
-                            <div className="flex flex-col gap-2">
-                                <div className="flex justify-between items-start">
-                                    <div className={`w-8 h-8 rounded-sm ${stat.gradient} flex items-center justify-center`}>
-                                        <stat.icon className="w-4 h-4 text-white" />
-                                    </div>
-                                    <span className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider">{stat.title}</span>
-                                </div>
-                                <div>
-                                    <p className="text-xl font-bold text-foreground leading-none">{stat.value}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        title={stat.title}
+                        value={stat.value}
+                        icon={stat.icon}
+                        gradientClass={stat.gradient}
+                    />
                 ))}
             </div>
 
-            {/* Performance Chart */}
+
             <div className="bg-card border border-border p-4">
                 <div className="flex items-center gap-2 mb-2">
                     <Zap className="w-4 h-4 text-[var(--color-tile-b-from)]" />
@@ -164,7 +148,7 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                 )}
             </div>
 
-            {/* History Table - Compact */}
+
             <div className="bg-card border border-border">
                 <div className="p-3 border-b border-border bg-muted/20">
                     <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Histórico Recente</h2>
@@ -176,7 +160,7 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                         </div>
                     ) : (
                         <>
-                            {/* View Desktop: Tabela */}
+
                             <div className="hidden md:block overflow-x-auto">
                                 <Table>
                                     <TableHeader>
@@ -208,7 +192,7 @@ export function DesempenhoClient({ attempts }: DesempenhoClientProps) {
                                 </Table>
                             </div>
 
-                            {/* View Mobile: Cards */}
+
                             <div className="md:hidden flex flex-col gap-3 p-3">
                                 {attempts.map((attempt) => (
                                     <div key={attempt.id} className="bg-secondary/10 border border-border rounded-lg p-3 flex flex-col gap-3">
