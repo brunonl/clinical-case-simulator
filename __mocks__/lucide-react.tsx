@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Mock genérico que retorna um SVG vazio para qualquer ícone importado
-const IconMock = React.forwardRef<SVGSVGElement, any>((props, ref) => (
+const IconMock = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>((props, ref) => (
     <svg ref={ref} {...props} data-testid="lucide-icon" />
 ));
 
