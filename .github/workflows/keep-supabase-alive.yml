@@ -17,8 +17,8 @@ jobs:
             echo "Configure em: Settings → Secrets and variables → Actions"
             exit 1
           fi
-          if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
-            echo "❌ ERRO: Secret SUPABASE_ANON_KEY não está configurada!"
+          if [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "❌ ERRO: Secret SUPABASE_SERVICE_ROLE_KEY não está configurada!"
             echo "Configure em: Settings → Secrets and variables → Actions"
             exit 1
           fi
@@ -37,9 +37,9 @@ jobs:
               --max-time 30 \
               --connect-timeout 10 \
               -X GET \
-              "${{ secrets.SUPABASE_URL }}/rest/v1/?select=count" \
-              -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-              -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+              "${{ secrets.SUPABASE_URL }}/rest/v1/institutions?select=id&limit=1" \
+              -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+              -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}")
 
             curl_exit=$?
 
@@ -62,7 +62,7 @@ jobs:
             http_code=$(echo "$response" | tail -n1)
 
             echo "HTTP Status: $http_code"
-            echo "Response body: $body"
+            echo "Response body starting with: $(echo "$body" | head -c 200)..."
 
             if [ "$http_code" -ge 200 ] 2>/dev/null && [ "$http_code" -lt 300 ] 2>/dev/null; then
               echo "✅ Ping bem-sucedido! HTTP $http_code"
