@@ -16,8 +16,7 @@ jobs:
       - name: Validate Secrets
         run: |
           MISSING=""
-          [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]    && MISSING="$MISSING SUPABASE_ACCESS_TOKEN"
-          [ -z "${{ secrets.SUPABASE_URL }}" ]             && MISSING="$MISSING SUPABASE_URL"
+          [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]     && MISSING="$MISSING SUPABASE_ACCESS_TOKEN"
           [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ] && MISSING="$MISSING SUPABASE_SERVICE_ROLE_KEY"
           if [ -n "$MISSING" ]; then
             echo "❌ Secrets ausentes:$MISSING"
@@ -35,16 +34,19 @@ jobs:
             echo "📦 Projeto: $PROJECT_REF"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-            # Ping the REST API - generates activity and resets Supabase's inactivity timer
-            echo "📡 Pingando banco para resetar timer de inatividade..."
+            # Build URL from PROJECT_REF so it always matches the project being pinged
+            SUPABASE_REST_URL="https://${PROJECT_REF}.supabase.co"
 
+            # Ping the REST API to generate activity and reset Supabase's inactivity timer
+            # '|| echo "000"' prevents bash -eo pipefail from killing the script on curl errors
+            echo "📡 Pingando banco para resetar timer de inatividade..."
             ping_http=$(curl -s -o /dev/null -w "%{http_code}" \
               --max-time 20 \
               -X GET \
-              "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+              "${SUPABASE_REST_URL}/rest/v1/" \
               -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
               -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-              -H "Accept: application/json")
+              -H "Accept: application/json" || echo "000")
 
             echo "📡 Ping status: HTTP $ping_http"
 
@@ -58,26 +60,36 @@ jobs:
 
             status_response=$(curl -s --max-time 30 \
               -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" \
-              "https://api.supabase.com/v1/projects/$PROJECT_REF")
+              "https://api.supabase.com/v1/projects/$PROJECT_REF" || echo "{}")
 
-            project_status=$(echo "$status_response" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
-            project_name=$(echo "$status_response"  | grep -o '"name":"[^"]*"'   | head -1 | cut -d'"' -f4)
-            echo "📌 Status: $project_status ($project_name)"
+            echo "📄 Resposta da API: $status_response"
+
+            project_status=$(echo "$status_response" | jq -r '.status // empty' 2>/dev/null)
+            project_name=$(echo "$status_response"   | jq -r '.name   // empty' 2>/dev/null)
+
+            # Fallback to grep if jq is unavailable
+            [ -z "$project_status" ] && project_status=$(echo "$status_response" | grep -oP '"status"\s*:\s*"\K[^"]+' | head -1)
+            [ -z "$project_name"   ] && project_name=$(echo   "$status_response" | grep -oP '"name"\s*:\s*"\K[^"]+'   | head -1)
+
+            echo "📌 Status: '$project_status' ($project_name)"
 
             if [ "$project_status" = "INACTIVE" ] || [ "$project_status" = "PAUSED" ]; then
               echo "🔄 Projeto pausado! Restaurando automaticamente..."
 
-              restore_http=$(curl -s -o /dev/null -w "%{http_code}" \
+              restore_response=$(curl -s -w "\n%{http_code}" \
                 --max-time 60 \
                 -X POST \
                 -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" \
                 -H "Content-Type: application/json" \
-                "https://api.supabase.com/v1/projects/$PROJECT_REF/restore")
+                -d '{}' \
+                "https://api.supabase.com/v1/projects/$PROJECT_REF/restore" || echo -e "{}\n000")
+
+              restore_http=$(echo "$restore_response" | tail -1)
+              restore_body=$(echo "$restore_response" | head -1)
+              echo "📄 Restauração (HTTP $restore_http): $restore_body"
 
               if [ "$restore_http" -ge 200 ] 2>/dev/null && [ "$restore_http" -lt 300 ] 2>/dev/null; then
-                echo "🚀 Restauração iniciada! (HTTP $restore_http)"
-                echo "⏳ O projeto ficará ativo em poucos minutos."
-                echo "   A próxima execução (em 3 dias) irá manter ativo via ping normal."
+                echo "🚀 Restauração iniciada! O projeto ficará ativo em poucos minutos."
               else
                 echo "❌ Falha na restauração! HTTP $restore_http"
                 OVERALL_SUCCESS=false
@@ -85,6 +97,9 @@ jobs:
 
             elif [ "$project_status" = "RESTORING" ] || [ "$project_status" = "COMING_UP" ]; then
               echo "⏳ Projeto em restauração ($project_status). Aguarde a próxima execução."
+            elif [ -z "$project_status" ]; then
+              echo "❌ Não foi possível obter o status. Resposta: $status_response"
+              OVERALL_SUCCESS=false
             else
               echo "❌ Status inesperado: '$project_status'. Investigar manualmente."
               OVERALL_SUCCESS=false
