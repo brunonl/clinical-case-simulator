@@ -2,94 +2,153 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # Runs at 00:00 UTC every 3 days
-    - cron: '0 0 */3 * *'
+    # Runs every 3 days at 09:17 UTC (non-standard time to avoid GitHub queue congestion)
+    # Supabase pauses after 7 days of inactivity, so 3 days gives comfortable margin
+    - cron: '17 9 */3 * *'
   workflow_dispatch: # Allows manual trigger
 
+# Required for the keepalive auto-commit
+permissions:
+  contents: write
+
 jobs:
-  ping-supabase:
+  keep-alive:
     runs-on: ubuntu-latest
+    env:
+      # Add all Supabase project refs you want to keep alive (space-separated)
+      SUPABASE_PROJECT_REFS: "trnqtxssbntqnyknjfdh"
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Validate Secrets
         run: |
-          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
-            echo "❌ ERRO: Secret SUPABASE_URL não está configurada!"
-            echo "Configure em: Settings → Secrets and variables → Actions"
+          if [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]; then
+            echo "❌ ERRO: Secret SUPABASE_ACCESS_TOKEN não está configurada!"
+            echo ""
+            echo "📋 Como criar:"
+            echo "  1. Vá em: https://supabase.com/dashboard/account/tokens"
+            echo "  2. Clique em 'Generate new token'"
+            echo "  3. Copie o token gerado"
+            echo "  4. No GitHub: Settings → Secrets and variables → Actions"
+            echo "  5. Adicione: SUPABASE_ACCESS_TOKEN = <seu_token>"
             exit 1
           fi
-          if [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
-            echo "❌ ERRO: Secret SUPABASE_SERVICE_ROLE_KEY não está configurada!"
-            echo "Configure em: Settings → Secrets and variables → Actions"
-            exit 1
-          fi
-          echo "✅ Secrets configuradas corretamente."
+          echo "✅ SUPABASE_ACCESS_TOKEN configurada."
 
-      - name: Ping Supabase Database
+      - name: Check & Restore Supabase Projects
         run: |
-          MAX_RETRIES=3
-          RETRY_DELAY=30
-          SUCCESS=false
+          OVERALL_SUCCESS=true
 
-          for attempt in $(seq 1 $MAX_RETRIES); do
-            echo "🔄 Tentativa $attempt de $MAX_RETRIES..."
+          for PROJECT_REF in $SUPABASE_PROJECT_REFS; do
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "📦 Processando projeto: $PROJECT_REF"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-            response=$(curl -s -w "\n%{http_code}" \
+            # Step 1: Check project status via Management API
+            echo "🔍 Verificando status do projeto..."
+            status_response=$(curl -s \
               --max-time 30 \
-              --connect-timeout 10 \
-              -X GET \
-              "${{ secrets.SUPABASE_URL }}/rest/v1/institutions?select=id&limit=1" \
-              -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-              -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}")
+              -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" \
+              "https://api.supabase.com/v1/projects/$PROJECT_REF")
 
-            curl_exit=$?
+            project_status=$(echo "$status_response" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
+            project_name=$(echo "$status_response" | grep -o '"name":"[^"]*"' | head -1 | cut -d'"' -f4)
 
-            if [ $curl_exit -ne 0 ]; then
-              echo "⚠️ curl falhou com código de saída $curl_exit"
-              if [ $attempt -lt $MAX_RETRIES ]; then
-                echo "Aguardando ${RETRY_DELAY}s antes de tentar novamente..."
-                sleep $RETRY_DELAY
-                continue
-              fi
-              echo "❌ FALHA: Não foi possível conectar ao Supabase após $MAX_RETRIES tentativas!"
-              echo "Possíveis causas:"
-              echo "  - Projeto Supabase está pausado"
-              echo "  - URL incorreta"
-              echo "  - Problema de rede"
-              exit 1
+            if [ -z "$project_status" ]; then
+              echo "⚠️ Não foi possível obter o status. Resposta:"
+              echo "$status_response" | head -c 500
+              OVERALL_SUCCESS=false
+              continue
             fi
 
-            body=$(echo "$response" | head -n -1)
-            http_code=$(echo "$response" | tail -n1)
+            echo "📌 Projeto: $project_name"
+            echo "📌 Status: $project_status"
 
-            echo "HTTP Status: $http_code"
-            echo "Response body starting with: $(echo "$body" | head -c 200)..."
+            # Step 2: Handle based on status
+            case "$project_status" in
+              "ACTIVE_HEALTHY"|"ACTIVE")
+                echo "✅ Projeto está ATIVO! Fazendo ping de manutenção..."
 
-            if [ "$http_code" -ge 200 ] 2>/dev/null && [ "$http_code" -lt 300 ] 2>/dev/null; then
-              echo "✅ Ping bem-sucedido! HTTP $http_code"
-              echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-              SUCCESS=true
-              break
-            fi
+                # Optional: ping the REST API to generate activity
+                if [ -n "${{ secrets.SUPABASE_URL }}" ] && [ -n "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+                  ping_response=$(curl -s -o /dev/null -w "%{http_code}" \
+                    --max-time 15 \
+                    -X GET \
+                    "${{ secrets.SUPABASE_URL }}/rest/v1/?limit=1" \
+                    -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+                    -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}")
+                  echo "📡 Ping REST API: HTTP $ping_response"
+                fi
+                echo "✅ Projeto $project_name mantido ativo com sucesso!"
+                ;;
 
-            if [ "$http_code" -eq 0 ] 2>/dev/null || ! [ "$http_code" -eq "$http_code" ] 2>/dev/null; then
-              echo "⚠️ Resposta inválida recebida"
-            else
-              echo "⚠️ HTTP $http_code - Resposta não-2xx"
-            fi
+              "INACTIVE"|"PAUSED")
+                echo "⚠️ Projeto está PAUSADO! Iniciando restauração automática..."
 
-            if [ $attempt -lt $MAX_RETRIES ]; then
-              echo "Aguardando ${RETRY_DELAY}s antes de tentar novamente..."
-              sleep $RETRY_DELAY
-            fi
+                restore_response=$(curl -s -w "\n%{http_code}" \
+                  --max-time 60 \
+                  -X POST \
+                  -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" \
+                  -H "Content-Type: application/json" \
+                  "https://api.supabase.com/v1/projects/$PROJECT_REF/restore")
+
+                restore_http=$(echo "$restore_response" | tail -n1)
+                restore_body=$(echo "$restore_response" | head -n -1)
+
+                if [ "$restore_http" -ge 200 ] 2>/dev/null && [ "$restore_http" -lt 300 ] 2>/dev/null; then
+                  echo "🚀 Restauração iniciada com sucesso! (HTTP $restore_http)"
+                  echo "⏳ O projeto pode levar alguns minutos para ficar totalmente disponível."
+
+                  # Wait and verify restoration
+                  echo "⏳ Aguardando 60s para verificar restauração..."
+                  sleep 60
+
+                  verify_response=$(curl -s \
+                    --max-time 30 \
+                    -H "Authorization: Bearer ${{ secrets.SUPABASE_ACCESS_TOKEN }}" \
+                    "https://api.supabase.com/v1/projects/$PROJECT_REF")
+
+                  new_status=$(echo "$verify_response" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
+                  echo "📌 Novo status: $new_status"
+
+                  if [ "$new_status" = "ACTIVE_HEALTHY" ] || [ "$new_status" = "ACTIVE" ] || [ "$new_status" = "RESTORING" ] || [ "$new_status" = "COMING_UP" ]; then
+                    echo "✅ Restauração em progresso/concluída!"
+                  else
+                    echo "⚠️ Status após restauração: $new_status (pode ainda estar em andamento)"
+                  fi
+                else
+                  echo "❌ Falha ao restaurar! HTTP $restore_http"
+                  echo "Resposta: $restore_body"
+                  OVERALL_SUCCESS=false
+                fi
+                ;;
+
+              "RESTORING"|"COMING_UP"|"UPGRADING")
+                echo "⏳ Projeto está em transição ($project_status). Aguardando..."
+                ;;
+
+              *)
+                echo "⚠️ Status desconhecido: $project_status"
+                OVERALL_SUCCESS=false
+                ;;
+            esac
           done
 
-          if [ "$SUCCESS" != "true" ]; then
-            echo ""
-            echo "❌ FALHA: Ping falhou após $MAX_RETRIES tentativas!"
-            echo "🔴 O projeto Supabase pode estar pausado ou inacessível."
-            echo "Ações necessárias:"
-            echo "  1. Verifique o dashboard: https://supabase.com/dashboard"
-            echo "  2. Se pausado, restaure o projeto manualmente"
-            echo "  3. Verifique se os secrets estão corretos"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          if [ "$OVERALL_SUCCESS" = "true" ]; then
+            echo "✅ Todos os projetos processados com sucesso!"
+          else
+            echo "⚠️ Alguns projetos tiveram problemas. Verifique os logs acima."
             exit 1
           fi
+          echo "📅 Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+      # Keepalive: prevents GitHub from disabling this workflow after 60 days of inactivity
+      - name: Keepalive - Prevent GitHub from disabling this workflow
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          time_elapsed: 45
+          commit_message: "ci: keepalive - prevent workflow from being disabled"
