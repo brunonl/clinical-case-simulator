@@ -10,7 +10,6 @@ export default async function QuizPage({ params }: QuizPageProps) {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Fetch the clinical case
     const { data: clinicalCase, error: caseError } = await supabase
         .from("clinical_cases")
         .select("*")
@@ -21,8 +20,8 @@ export default async function QuizPage({ params }: QuizPageProps) {
         notFound();
     }
 
-    // Now uses questions from JSONB inside clinicalCase
-    // We cast it to ensure type safety in the client component
+    // Uses questions from JSONB inside clinicalCase
+    // Cast to ensure type safety in the client component
     return (
         <QuizClient
             clinicalCase={clinicalCase}

@@ -69,7 +69,7 @@ export default function SignupPage() {
 
     return (
         <div className="min-h-screen flex bg-[#050505] selection:bg-emerald-500/30 selection:text-emerald-200 overflow-hidden">
-            {/* Left Panel - Branding (Igual ao Login para consistência) */}
+            {/* Left Panel - Branding (Same as Login for consistency) */}
             <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-[#0a0a0a] border-r border-white/5 flex-col justify-center">
                 {/* RESTORED: User Provided Grid Code (100px) */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]"></div>

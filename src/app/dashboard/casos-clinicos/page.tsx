@@ -3,7 +3,7 @@ import { ClinicalCaseService } from "@/services/clinical-case.service";
 import { CasosClinicosClient } from "./client";
 
 export default async function CasosClinicosPage() {
-    // Usa services ao invés de acessar o banco diretamente
+    // Uses services instead of accessing the database directly
     const institutions = await InstitutionService.getAll();
     const cases = await ClinicalCaseService.getAllWithInstitution();
 

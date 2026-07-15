@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { DashboardTile } from './dashboard-tile';
 
-// Mock do ícone local para garantir controle
+// Mock local icon to ensure control
 import { LucideIcon } from 'lucide-react';
 
 const MockIcon = ((props: React.SVGProps<SVGSVGElement>) => (
@@ -22,14 +22,14 @@ describe('DashboardTile', () => {
 
         render(<DashboardTile {...props} />);
 
-        // Verificar se os textos principais estão presentes
-        // 'T' aparece duas vezes: na letra grande e no atalho de teclado (kbd)
+        // Verify if main texts are present
+        // 'T' appears twice: in the large letter and in the keyboard shortcut (kbd)
         expect(screen.getAllByText('T')).toHaveLength(2);
         expect(screen.getByText('Test Tile')).toBeInTheDocument();
         expect(screen.getByText('Click Me')).toBeInTheDocument();
 
-        // Verificar se o link tem o href correto
-        // O componente define role="menuitem" explicitamente
+        // Verify if the link has the correct href
+        // The component explicitly defines role="menuitem"
         const link = screen.getByRole('menuitem');
         expect(link).toHaveAttribute('href', '/test-route');
     });

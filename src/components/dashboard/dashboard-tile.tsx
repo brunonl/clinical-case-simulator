@@ -36,7 +36,7 @@ export function DashboardTile({
             )}
             role="menuitem"
         >
-            {/* Background com gradiente usando utility class */}
+            {/* Gradient background using utility class */}
             <div
                 className={cn(
                     "absolute inset-0",
@@ -45,26 +45,26 @@ export function DashboardTile({
                     "motion-safe:transition-all motion-safe:duration-300"
                 )}
             >
-                {/* Barra escura inferior - Flexbox sem padding vertical */}
+                {/* Bottom dark bar - Flexbox without vertical padding */}
                 <div className="absolute bottom-0 left-0 right-0 px-4 flex items-center justify-between tile-bar h-[32px]">
-                    {/* Texto ENTRAR/SAIR */}
+                    {/* ENTER/EXIT text */}
                     <span className="text-[10px] text-white/90 uppercase tracking-[0.15em] font-medium leading-none">
                         {buttonLabel}
                     </span>
 
-                    {/* Indicador - Flat (quadrado) */}
+                    {/* Indicator - Flat (square) */}
                     <div className="w-5 h-5 sm:w-6 sm:h-6 border border-white/40 flex items-center justify-center bg-white/10 group-hover:bg-white/20 motion-safe:transition-colors motion-safe:duration-200">
                         <span className="text-white/80 text-[10px] leading-none mb-[1px]">→</span>
                     </div>
                 </div>
 
-                {/* Conteúdo central: Letra + Label */}
+                {/* Central content: Letter + Label */}
                 <div
                     className="absolute inset-0 bottom-8 flex items-center justify-center p-4"
                     aria-hidden="true"
                 >
                     <div className="text-center text-white select-none relative z-10">
-                        {/* Letras aumentadas para mobile */}
+                        {/* Enlarged letters for mobile */}
                         <span className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-thin block leading-none tracking-wide drop-shadow-md mb-2">
                             {letter}
                         </span>
@@ -74,7 +74,7 @@ export function DashboardTile({
                     </div>
                 </div>
 
-                {/* Ícone decorativo - Mais visível */}
+                {/* Decorative icon - More visible */}
                 <div
                     className="absolute right-4 sm:right-8 top-1/2 -translate-y-[55%] opacity-20 group-hover:opacity-30 motion-safe:transition-opacity motion-safe:duration-300"
                     aria-hidden="true"
@@ -85,7 +85,7 @@ export function DashboardTile({
                     />
                 </div>
 
-                {/* Indicador de tecla de atalho */}
+                {/* Keyboard shortcut indicator */}
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                     <KeyboardKey size="sm" variant="compact">{letter}</KeyboardKey>
                 </div>

@@ -25,19 +25,15 @@ interface QuizClientProps {
 
 export function QuizClient({ clinicalCase }: QuizClientProps) {
     const router = useRouter();
-
-    // Parse questions from JSONB column
     const questions: QuestionJSON[] = Array.isArray(clinicalCase.questions)
         ? (clinicalCase.questions as unknown as QuestionJSON[])
         : [];
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [answers, setAnswers] = useState<Record<number, number>>({}); // questionId -> optionIndex
+    const [answers, setAnswers] = useState<Record<number, number>>({});
     const [showResult, setShowResult] = useState(false);
     const [score, setScore] = useState(0);
     const [saving, setSaving] = useState(false);
-
-    // Safety check if no questions exist
     if (!questions || questions.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-border">
@@ -75,7 +71,6 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
     const handleFinish = async () => {
         setSaving(true);
 
-        // Calculate score
         let correctCount = 0;
         questions.forEach((q) => {
             if (answers[q.id] === q.correct) {
@@ -86,7 +81,6 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
         const finalScore = (correctCount / totalQuestions) * 100;
         setScore(finalScore);
 
-        // Save attempt to database via Service
         try {
             const user = await QuizService.getUser();
             if (user) {
@@ -404,7 +398,7 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                     <Button
                         onClick={handleFinish}
                         disabled={!allAnswered || saving}
-                        variant="gradient" className="h-10 px-8 text-sm" // Removed size="lg"
+                        variant="gradient" className="h-10 px-8 text-sm"
                     >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
                         {saving ? "Finalizando..." : "Finalizar Prova"}
@@ -413,7 +407,7 @@ export function QuizClient({ clinicalCase }: QuizClientProps) {
                     <Button
                         onClick={handleNext}
                         disabled={!isAnswered(currentQuestion.id)}
-                        variant="gradient" className="h-10 px-8 text-sm" // Removed size="lg"
+                        variant="gradient" className="h-10 px-8 text-sm"
                     >
                         Próxima Questão
                         <ArrowRight className="w-4 h-4 ml-2" />

@@ -19,7 +19,7 @@ export default function DashboardPage() {
             const key = e.key.toLowerCase();
             const route = KEY_MAP[key];
 
-            // Only blocks keys if we have a valid route for it
+            // Only block keys if we have a valid route for it
             if (route && route !== "/login") {
                 e.preventDefault();
                 router.push(route);

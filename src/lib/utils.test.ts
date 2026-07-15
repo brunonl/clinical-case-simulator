@@ -14,9 +14,9 @@ describe('Unit: CN Utility (class name merger)', () => {
      * Verifica se strings simples são concatenadas com espaço.
      */
     it('Scenario: Basic string merging - joins class names with spaces', () => {
-        // Act
+
         const result = cn('bg-red-500', 'text-white');
-        // Assert
+
         expect(result).toBe('bg-red-500 text-white');
     });
 
@@ -26,13 +26,13 @@ describe('Unit: CN Utility (class name merger)', () => {
      * Deve ignorar valores false/null/undefined.
      */
     it('Scenario: Conditional rendering - ignores falsy values', () => {
-        // Act
+
         const result = cn(
             'bg-red-500',
             false && 'text-white', // deve sumir
             true && 'p-4'          // deve ficar
         );
-        // Assert
+
         expect(result).toBe('bg-red-500 p-4');
     });
 

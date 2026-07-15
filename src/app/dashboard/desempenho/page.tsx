@@ -5,7 +5,6 @@ import { PerformanceServerService } from "@/services/server/performance";
 export default async function DesempenhoPage() {
     const supabase = await createClient();
 
-    // Get current user
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -15,8 +14,6 @@ export default async function DesempenhoPage() {
             </div>
         );
     }
-
-    // Fetch user's quiz attempts with clinical case info
     const attempts = await PerformanceServerService.getUserAttempts(user.id);
 
     return <DesempenhoClient attempts={attempts || []} />;

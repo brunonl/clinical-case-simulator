@@ -35,9 +35,7 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// ============================================
-// VARIANTES
-// ============================================
+// Variants
 
 export const Default: Story = {
     args: {
@@ -95,9 +93,7 @@ export const Link: Story = {
     },
 };
 
-// ============================================
-// TAMANHOS
-// ============================================
+// Sizes
 
 export const Sizes: Story = {
     render: () => (
@@ -118,9 +114,7 @@ export const Sizes: Story = {
     },
 };
 
-// ============================================
-// COM ÍCONES
-// ============================================
+// With Icons
 
 export const WithIcon: Story = {
     args: {
@@ -153,9 +147,7 @@ export const IconSizes: Story = {
     ),
 };
 
-// ============================================
-// ESTADOS
-// ============================================
+// States
 
 export const Loading: Story = {
     args: {
@@ -176,9 +168,7 @@ export const Disabled: Story = {
     },
 };
 
-// ============================================
-// SHOWCASE: TODAS AS VARIANTES
-// ============================================
+// Showcase: All Variants
 
 export const AllVariants: Story = {
     render: () => (
